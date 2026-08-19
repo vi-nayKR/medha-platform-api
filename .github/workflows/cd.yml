@@ -1,0 +1,107 @@
+# ============================================================
+#  Lean CD — local LAN registry, hostPath Go cache
+#  Target: <1 min build time
+# ============================================================
+name: CD
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      git_sha:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: "Build & Push → ${{ inputs.environment }}"
+    # ARC scale-set jobs must target the scale-set name directly. Adding the
+    # generic `self-hosted` label prevents ARC from assigning the job.
+    runs-on: medha-runners
+    # Runs under the GitHub Environment named "dev" or "prod". Configure the "prod"
+    # environment with required reviewers so prod deploys pause for approval; "dev"
+    # stays ungated. Environment-scoped secrets are also picked up here.
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: true
+    steps:
+      - name: Validate GitOps credentials
+        env:
+          INFRA_REPO_TOKEN: ${{ secrets.INFRA_REPO_TOKEN }}
+        run: |
+          if [ -z "${INFRA_REPO_TOKEN}" ]; then
+            echo "::error::Configure INFRA_REPO_TOKEN with write access to medha-infra"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.0'
+          cache: false
+
+      - name: Build Go binary
+        env:
+          GOCACHE: /home/runner/buildx-cache/go-build
+          GOMODCACHE: /home/runner/buildx-cache/gopath/pkg/mod
+          GOTOOLCHAIN: local
+        run: |
+          CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o medha-api ./cmd/medha-api
+          if [ -f /home/runner/buildx-cache/goose ]; then
+            echo "Using cached goose binary from host"
+            cp /home/runner/buildx-cache/goose ./goose
+          else
+            echo "Goose cache miss, downloading from GitHub releases..."
+            curl -sL https://github.com/pressly/goose/releases/download/v3.24.1/goose_linux_x86_64 -o ./goose
+            chmod +x ./goose
+            cp ./goose /home/runner/buildx-cache/goose
+          fi
+
+      - name: Build & Push to local registry
+        run: |
+          IMG=local-registry:5000/medha-api-${{ inputs.environment }}
+          docker build --target ci -f build/Dockerfile \
+            -t ${IMG}:${{ inputs.git_sha }} \
+            -t ${IMG}:latest \
+            .
+          docker push ${IMG}:${{ inputs.git_sha }}
+          docker push ${IMG}:latest
+
+      - name: Check out the GitOps source of truth
+        uses: actions/checkout@v4
+        with:
+          repository: vi-nayKR/medha-platform-infra
+          ref: main
+          path: medha-infra
+          token: ${{ secrets.INFRA_REPO_TOKEN }}
+
+      - name: Pin image tag in medha-infra
+        run: |
+          cd medha-infra
+          sed -i "s|newTag: .*|newTag: ${{ inputs.git_sha }}|" \
+            kubernetes/overlays/${{ inputs.environment }}/kustomization.yaml
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add kubernetes/overlays/${{ inputs.environment }}/kustomization.yaml
+          git diff --cached --quiet || git commit -m "deploy(${{ inputs.environment }}): ${{ inputs.git_sha }}"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "failed to update medha-infra after three attempts" >&2
+          exit 1

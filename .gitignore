@@ -1,0 +1,60 @@
+# Binaries
+bin/
+dist/
+tmp/
+medha-api
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*firebase-adminsdk*.json
+
+# Test binary
+*.test
+
+# Coverage & Profile
+*.out
+coverage/
+
+# Go workspace
+go.work
+
+# Dependencies
+vendor/
+node_modules/
+
+# IDE & Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+secrets.yaml
+deployments/secrets-*.yaml
+keys/
+*.pem
+
+# Air hot-reload
+build-errors.log
+
+# Bruno Collections
+bruno/
+
+# Logs & Scratch
+*.log
+*.txt
+scratch/
+
+# Backups
+*.pgdump
+*.tar.gz
+*.tar.tz
+*backup*

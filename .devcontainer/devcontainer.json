@@ -1,0 +1,19 @@
+{
+  "name": "Medha API Dev",
+  "image": "golang:1.26",
+  "features": {
+    "ghcr.io/devcontainers/features/postgresql:1": {
+      "version": "17"
+    }
+  },
+  "forwardPorts": [8080, 5432],
+  "postCreateCommand": "apt update && apt install -y postgis && go install github.com/pressly/goose/v3/cmd/goose@latest && go install github.com/cosmtrek/air@latest",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.Go",
+        "ms-vscode.makefile-tools"
+      ]
+    }
+  }
+}

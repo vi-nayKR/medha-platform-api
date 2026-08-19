@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgis/postgis:17-3.4
+    container_name: medha-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in the local .env file}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in the local .env file}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in the local .env file}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d/migrations:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medha-network
+
+  medha-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medha-api
+    environment:
+      - DATABASE_URL=${DATABASE_URL:?set DATABASE_URL in the local .env file}
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    networks:
+      - medha-network
+    command: air
+
+volumes:
+  postgres_data:
+
+networks:
+  medha-network:
+    driver: bridge

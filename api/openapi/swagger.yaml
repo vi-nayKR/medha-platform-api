@@ -1,0 +1,6812 @@
+basePath: /
+definitions:
+  AdminStoryRequest:
+    properties:
+      action_label:
+        type: string
+      action_url:
+        type: string
+      audience_rules:
+        additionalProperties: {}
+        type: object
+      audience_scope:
+        type: string
+      caption:
+        type: string
+      expires_at:
+        type: integer
+      media_type:
+        type: string
+      media_url:
+        type: string
+      priority:
+        type: integer
+      starts_at:
+        type: integer
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+    type: object
+  AdminStoryResponse:
+    properties:
+      action_label:
+        type: string
+      action_url:
+        type: string
+      audience_scope:
+        type: string
+      caption:
+        type: string
+      created_at:
+        type: integer
+      created_by_admin:
+        type: string
+      expires_at:
+        type: integer
+      id:
+        type: string
+      media_type:
+        type: string
+      media_url:
+        type: string
+      priority:
+        type: integer
+      published_at:
+        type: integer
+      publisher_key:
+        type: string
+      starts_at:
+        type: integer
+      status:
+        type: string
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: integer
+    type: object
+  AuthResponse:
+    properties:
+      access_token:
+        example: eyJhbGciOiJSUzI1NiJ9...
+        type: string
+      expires_in:
+        example: 900
+        type: integer
+      is_new_user:
+        example: false
+        type: boolean
+      is_phone_verified:
+        example: true
+        type: boolean
+      is_profile_complete:
+        example: true
+        type: boolean
+      refresh_token:
+        example: a1b2c3d4e5f6...
+        type: string
+      token_type:
+        example: Bearer
+        type: string
+      user:
+        $ref: '#/definitions/UserInfo'
+    type: object
+  BadgeResponse:
+    properties:
+      average_rating:
+        type: number
+      badge_icon:
+        type: string
+      badge_label:
+        type: string
+      badge_tier:
+        type: string
+      ceremonies_completed:
+        type: integer
+      pandit_id:
+        type: string
+      total_feedback_count:
+        type: integer
+    type: object
+  CeremonyDTO:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      display_name:
+        type: string
+      display_order:
+        type: integer
+      id:
+        type: string
+      image_url:
+        type: string
+      image_url_no_bg:
+        type: string
+      is_active:
+        type: boolean
+      logo_url:
+        type: string
+      slug:
+        type: string
+    type: object
+  CheckUsernameExistsResponse:
+    properties:
+      exists:
+        type: boolean
+    type: object
+  City:
+    properties:
+      city:
+        type: string
+      createdAt:
+        type: integer
+      id:
+        type: string
+      isActive:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      state:
+        type: string
+      updatedAt:
+        type: integer
+    type: object
+  ConfirmRequestDTO:
+    properties:
+      object_key:
+        type: string
+      upload_type:
+        enum:
+        - profile_photo
+        - post_media
+        type: string
+    required:
+    - object_key
+    - upload_type
+    type: object
+  ConfirmResponseDTO:
+    properties:
+      public_url:
+        type: string
+    type: object
+  ConversationResponse:
+    properties:
+      created_at:
+        type: integer
+      event_id:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      last_message_at:
+        type: integer
+      match_id:
+        type: string
+      participants:
+        items:
+          $ref: '#/definitions/ParticipantResponse'
+        type: array
+      title:
+        type: string
+      type:
+        type: string
+      unread_count:
+        type: integer
+    type: object
+  CreateConversationRequest:
+    properties:
+      event_id:
+        type: string
+      match_id:
+        type: string
+      participant_ids:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  CreateEventRequest:
+    properties:
+      address:
+        example: 12 MG Road, Bengaluru
+        type: string
+      ceremony_type:
+        example: custom
+        type: string
+      custom_ceremony_description:
+        example: A family ritual performed before the main ceremony; include samagri,
+          preferred vidhi, and regional custom notes here.
+        type: string
+      custom_ceremony_name:
+        example: Gudli Pooja
+        type: string
+      description:
+        example: Please arrive by 7 AM. Samagri will be arranged by the family.
+        type: string
+      event_date:
+        example: "2026-06-15"
+        type: string
+      latitude:
+        example: 12.9716
+        maximum: 90
+        minimum: -90
+        type: number
+      longitude:
+        example: 77.5946
+        maximum: 180
+        minimum: -180
+        type: number
+    required:
+    - address
+    - ceremony_type
+    - event_date
+    - latitude
+    - longitude
+    type: object
+  CreateFeeConfigRequest:
+    properties:
+      ceremony_type:
+        type: string
+      fee_amount:
+        type: number
+      fee_type:
+        type: string
+    type: object
+  DataResponse:
+    properties:
+      data: {}
+    type: object
+  DevLoginRequestV2:
+    properties:
+      phone:
+        description: 'alternative: login by phone directly'
+        example: "+919999999999"
+        type: string
+      role:
+        description: '"pandit" or "yajman" (backward compatible)'
+        example: pandit
+        type: string
+    type: object
+  DevUserDTO:
+    properties:
+      first_name:
+        example: Koushik
+        type: string
+      phone:
+        example: "+919999999999"
+        type: string
+      role:
+        example: pandit
+        type: string
+    type: object
+  EventNearbyResponse:
+    properties:
+      address:
+        type: string
+      ceremony_logo_url:
+        type: string
+      ceremony_type:
+        type: string
+      conversation_id:
+        description: Present only when Booked
+        type: string
+      created_at:
+        type: string
+      custom_ceremony_description:
+        type: string
+      custom_ceremony_name:
+        type: string
+      description:
+        type: string
+      distance_km:
+        type: number
+      event_date:
+        type: string
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/LocationDTO'
+      pandit_name:
+        type: string
+      pandit_phone_number:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      yajman_first_name:
+        type: string
+      yajman_id:
+        type: string
+      yajman_last_name:
+        type: string
+      yajman_phone_number:
+        type: string
+      yajman_photo_url:
+        type: string
+    type: object
+  EventResponse:
+    properties:
+      address:
+        type: string
+      ceremony_logo_url:
+        type: string
+      ceremony_type:
+        type: string
+      conversation_id:
+        description: Present only when Booked
+        type: string
+      created_at:
+        type: string
+      custom_ceremony_description:
+        type: string
+      custom_ceremony_name:
+        type: string
+      description:
+        type: string
+      event_date:
+        type: string
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/LocationDTO'
+      pandit_name:
+        type: string
+      pandit_phone_number:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      yajman_id:
+        type: string
+      yajman_phone_number:
+        type: string
+    type: object
+  ExpressInterestRequest:
+    properties:
+      event_id:
+        type: string
+      message:
+        type: string
+    required:
+    - event_id
+    type: object
+  FeeConfigResponse:
+    properties:
+      ceremony_type:
+        type: string
+      created_at:
+        type: integer
+      fee_amount:
+        type: number
+      fee_type:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      updated_at:
+        type: integer
+    type: object
+  FeedPostResponse:
+    properties:
+      author_first_name:
+        type: string
+      author_id:
+        type: string
+      author_is_official:
+        type: boolean
+      author_last_name:
+        type: string
+      author_photo_url:
+        type: string
+      author_role:
+        type: string
+      author_username:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      image_urls:
+        items:
+          type: string
+        type: array
+      like_count:
+        type: integer
+      liked_by_user:
+        type: boolean
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  FestivalResponse:
+    description: A named Hindu festival with its calendar date.
+    properties:
+      date:
+        type: integer
+      description:
+        type: string
+      festival:
+        type: string
+      id:
+        type: string
+    type: object
+  FinalizeAssignmentRequest:
+    properties:
+      lead_id:
+        type: string
+    type: object
+  InterestDetailResponse:
+    properties:
+      ceremony_logo_url:
+        type: string
+      ceremony_type:
+        type: string
+      connection_status:
+        description: '"pending" | "connected"'
+        type: string
+      conversation_id:
+        type: string
+      created_at:
+        type: string
+      event_address:
+        type: string
+      event_date:
+        type: string
+      event_id:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      pandit_first_name:
+        type: string
+      pandit_id:
+        type: string
+      pandit_last_name:
+        type: string
+      pandit_photo_url:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      yajman_phone_number:
+        type: string
+    type: object
+  InterestResponse:
+    properties:
+      connection_status:
+        description: '"pending" | "connected"'
+        type: string
+      conversation_id:
+        type: string
+      created_at:
+        type: string
+      event_id:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      pandit_id:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  ListResponse:
+    properties:
+      cursor:
+        type: string
+      data: {}
+    type: object
+  LocationDTO:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  LocationResponseV2:
+    properties:
+      latitude:
+        example: 12.9371
+        type: number
+      longitude:
+        example: 77.5728
+        type: number
+    type: object
+  LocationUpdateRequestV2:
+    properties:
+      latitude:
+        example: 12.9716
+        maximum: 90
+        minimum: -90
+        type: number
+      longitude:
+        example: 77.5946
+        maximum: 180
+        minimum: -180
+        type: number
+    required:
+    - latitude
+    - longitude
+    type: object
+  LogoutRequestV2:
+    properties:
+      refresh_token:
+        example: a1b2c3d4e5f6...
+        type: string
+    required:
+    - refresh_token
+    type: object
+  ManualAssignRequest:
+    properties:
+      admin_notes:
+        type: string
+      event_id:
+        type: string
+      pandit_id:
+        type: string
+      yajman_id:
+        type: string
+    type: object
+  MatchDetailResponse:
+    properties:
+      ceremony_type:
+        type: string
+      event_address:
+        type: string
+      event_date:
+        type: string
+      event_id:
+        type: string
+      id:
+        type: string
+      matched_at:
+        type: string
+      pandit_first_name:
+        type: string
+      pandit_id:
+        type: string
+      pandit_last_name:
+        type: string
+      pandit_phone:
+        type: string
+      pandit_photo_url:
+        type: string
+      status:
+        type: string
+      yajman_first_name:
+        type: string
+      yajman_id:
+        type: string
+      yajman_last_name:
+        type: string
+      yajman_phone:
+        type: string
+      yajman_photo_url:
+        type: string
+    type: object
+  MedhaFeedPostRequest:
+    properties:
+      content:
+        type: string
+      image_urls:
+        items:
+          type: string
+        type: array
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  MedhaFeedPostResponse:
+    properties:
+      author_first_name:
+        type: string
+      author_id:
+        type: string
+      author_last_name:
+        type: string
+      author_photo_url:
+        type: string
+      author_role:
+        type: string
+      author_username:
+        type: string
+      comment_count:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: integer
+      id:
+        type: string
+      image_urls:
+        items:
+          type: string
+        type: array
+      like_count:
+        type: integer
+      tags:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: integer
+    type: object
+  MessageResponse:
+    properties:
+      content:
+        type: string
+      content_type:
+        type: string
+      conversation_id:
+        type: string
+      created_at:
+        type: integer
+      id:
+        type: string
+      metadata:
+        type: object
+      sender_id:
+        type: string
+      sender_name:
+        type: string
+    type: object
+  NearbyCityResult:
+    properties:
+      city:
+        type: string
+      distanceKm:
+        type: number
+      id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      state:
+        type: string
+    type: object
+  NotificationResponse:
+    properties:
+      body:
+        type: string
+      created_at:
+        type: string
+      data: {}
+      delivered_at:
+        type: string
+      id:
+        type: string
+      read:
+        type: boolean
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  PanchangaResponse:
+    description: Daily Hindu calendar details.
+    properties:
+      ayana:
+        type: string
+      date:
+        type: integer
+      festivals_events:
+        type: string
+      gulikala:
+        type: string
+      karana:
+        type: string
+      masa:
+        type: string
+      masa_niyamaka:
+        type: string
+      nakshatra:
+        type: string
+      paksha:
+        type: string
+      rahukala:
+        type: string
+      rutu:
+        type: string
+      samvatsara:
+        type: string
+      shraddha_tithi:
+        type: string
+      sunrise:
+        type: string
+      sunset:
+        type: string
+      tithi:
+        type: string
+      vasara:
+        type: string
+      yamaganda:
+        type: string
+      yoga:
+        type: string
+    type: object
+  PanditNearbyResponse:
+    properties:
+      about:
+        type: string
+      availability_status:
+        type: string
+      ceremony_specializations:
+        items:
+          type: string
+        type: array
+      connection_status:
+        description: '"not_connected" | "pending" | "connected"'
+        type: string
+      conversation_id:
+        type: string
+      distance_km:
+        type: number
+      first_name:
+        description: Joined user data
+        type: string
+      id:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      last_name:
+        type: string
+      parampara:
+        type: string
+      phone_number:
+        type: string
+      profile_photo_url:
+        type: string
+      service_radius_km:
+        type: integer
+      user_id:
+        type: string
+      veda_affiliation:
+        type: string
+    type: object
+  PanditProfileFullResponse:
+    properties:
+      about:
+        example: Experienced pandit with 15+ years.
+        type: string
+      availability_status:
+        example: available
+        type: string
+      ceremony_specializations:
+        example:
+        - '["vivah"'
+        - '"grihapravesh"]'
+        items:
+          type: string
+        type: array
+      first_name:
+        example: Ramesh
+        type: string
+      is_profile_complete:
+        example: true
+        type: boolean
+      languages:
+        example:
+        - '["Hindi"'
+        - '"Sanskrit"]'
+        items:
+          type: string
+        type: array
+      last_name:
+        example: Sharma
+        type: string
+      parampara:
+        example: Smartha
+        type: string
+      profile_photo_url:
+        example: https://cdn.medha.app/photos/abc.jpg
+        type: string
+      service_radius_km:
+        example: 30
+        type: integer
+      user_id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      veda_affiliation:
+        example: Rigveda
+        type: string
+    type: object
+  PanditProfileResponse:
+    properties:
+      about:
+        type: string
+      availability_status:
+        type: string
+      ceremony_specializations:
+        items:
+          type: string
+        type: array
+      first_name:
+        description: Joined user data
+        type: string
+      id:
+        type: string
+      languages:
+        items:
+          type: string
+        type: array
+      last_name:
+        type: string
+      parampara:
+        type: string
+      phone_number:
+        type: string
+      profile_photo_url:
+        type: string
+      service_radius_km:
+        type: integer
+      user_id:
+        type: string
+      veda_affiliation:
+        type: string
+    type: object
+  PanditProfileV2:
+    properties:
+      about:
+        type: string
+      availability_status:
+        type: string
+      ceremony_specializations:
+        items:
+          type: string
+        type: array
+      languages:
+        items:
+          type: string
+        type: array
+      parampara:
+        type: string
+      service_radius_km:
+        type: integer
+      veda_affiliation:
+        type: string
+    type: object
+  ParticipantResponse:
+    properties:
+      name:
+        type: string
+      profile_photo_url:
+        type: string
+      role:
+        type: string
+      user_id:
+        type: string
+    type: object
+  PresignRequestDTO:
+    properties:
+      content_type:
+        type: string
+      file_name:
+        maxLength: 255
+        type: string
+      upload_type:
+        enum:
+        - profile_photo
+        - post_media
+        type: string
+    required:
+    - content_type
+    - file_name
+    - upload_type
+    type: object
+  PresignResponseDTO:
+    properties:
+      expires_in:
+        description: in seconds
+        type: integer
+      object_key:
+        type: string
+      upload_url:
+        type: string
+    type: object
+  ProblemDetail:
+    properties:
+      detail:
+        type: string
+      instance:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  ProfileResponse:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      first_name:
+        example: Synthetic
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      is_phone_verified:
+        example: true
+        type: boolean
+      is_profile_complete:
+        example: true
+        type: boolean
+      last_name:
+        example: User
+        type: string
+      latitude:
+        example: 12.9716
+        type: number
+      longitude:
+        example: 77.5946
+        type: number
+      pandit_profile:
+        $ref: '#/definitions/PanditProfileV2'
+      phone:
+        example: "+919999999999"
+        type: string
+      profile_photo_url:
+        example: https://cdn.medha.app/photos/abc.jpg
+        type: string
+      role:
+        example: yajman
+        type: string
+      username:
+        example: syntheticuser
+        type: string
+    type: object
+  PublicProfileResponse:
+    properties:
+      badge_icon:
+        type: string
+      badge_label:
+        type: string
+      badge_tier:
+        type: string
+      city:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      pandit_profile:
+        $ref: '#/definitions/PanditProfileV2'
+      profile_photo_url:
+        type: string
+      role:
+        type: string
+      share_url:
+        type: string
+      state:
+        type: string
+      username:
+        type: string
+    type: object
+  RefreshTokenRequest:
+    properties:
+      refresh_token:
+        example: a1b2c3d4e5f6...
+        type: string
+    required:
+    - refresh_token
+    type: object
+  RefreshTokenResponse:
+    properties:
+      access_token:
+        example: eyJhbGciOiJSUzI1NiJ9...
+        type: string
+      expires_in:
+        example: 900
+        type: integer
+      refresh_token:
+        example: x9y8z7w6v5u4...
+        type: string
+      token_type:
+        example: Bearer
+        type: string
+    type: object
+  RegisterDeviceTokenRequest:
+    properties:
+      device_id:
+        type: string
+      platform:
+        enum:
+        - android
+        - ios
+        type: string
+      token:
+        type: string
+    required:
+    - device_id
+    - platform
+    type: object
+  RespondToInterestRequest:
+    properties:
+      accept:
+        type: boolean
+    type: object
+  RevGeocodeResponse:
+    properties:
+      responseCode:
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/RevGeocodeResult'
+        type: array
+      version:
+        type: string
+    type: object
+  RevGeocodeResult:
+    properties:
+      area:
+        type: string
+      city:
+        type: string
+      district:
+        type: string
+      formatted_address:
+        type: string
+      houseName:
+        type: string
+      houseNumber:
+        type: string
+      isRooftop:
+        type: boolean
+      isVenue:
+        type: boolean
+      lat:
+        type: string
+      lng:
+        type: string
+      locality:
+        type: string
+      pincode:
+        type: string
+      poi:
+        type: string
+      poi_dist:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+      street_dist:
+        type: string
+      subDistrict:
+        type: string
+      subLocality:
+        type: string
+      subSubLocality:
+        type: string
+      village:
+        type: string
+    type: object
+  SendMessageRequest:
+    properties:
+      content:
+        type: string
+      content_type:
+        description: defaults to "text"
+        type: string
+    type: object
+  SendOTPRequest:
+    properties:
+      phone:
+        example: "+919999999999"
+        type: string
+    required:
+    - phone
+    type: object
+  SendOTPResponse:
+    properties:
+      expires_in_seconds:
+        example: 600
+        type: integer
+      message:
+        example: OTP sent successfully
+        type: string
+      verification_id:
+        example: mc_verif_id_stored_in_redis
+        type: string
+    type: object
+  ServiceCitiesResponse:
+    properties:
+      serviceCities:
+        items:
+          $ref: '#/definitions/ServiceCityDetail'
+        type: array
+      totalCities:
+        type: integer
+    type: object
+  ServiceCityDetail:
+    properties:
+      cityId:
+        type: string
+      cityName:
+        type: string
+      distanceKm:
+        description: distance from home city, 0 for home itself
+        type: number
+      isHome:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      stateName:
+        type: string
+    type: object
+  SetPremiumRequest:
+    properties:
+      is_premium:
+        type: boolean
+      premium_badge:
+        type: string
+      premium_features:
+        type: object
+      premium_until:
+        type: integer
+    type: object
+  SetServiceCitiesRequest:
+    properties:
+      additionalCityIds:
+        items:
+          type: string
+        type: array
+      homeCityId:
+        type: string
+    required:
+    - homeCityId
+    type: object
+  SetupPanditProfileRequestDTO:
+    properties:
+      about:
+        example: Experienced pandit with 15+ years.
+        maxLength: 1000
+        type: string
+      availability_status:
+        enum:
+        - available
+        - unavailable
+        example: available
+        type: string
+      ceremony_specializations:
+        example:
+        - '["vivah"'
+        - '"grihapravesh"]'
+        items:
+          type: string
+        type: array
+      languages:
+        example:
+        - '["Hindi"'
+        - '"Sanskrit"]'
+        items:
+          type: string
+        type: array
+      parampara:
+        example: Smartha
+        maxLength: 100
+        type: string
+      service_radius_km:
+        example: 30
+        maximum: 500
+        minimum: 1
+        type: integer
+      veda_affiliation:
+        example: Rigveda
+        maxLength: 100
+        type: string
+    type: object
+  SetupProfileRequestDTO:
+    properties:
+      email:
+        example: synthetic@example.com
+        type: string
+      first_name:
+        example: Synthetic
+        maxLength: 50
+        minLength: 1
+        type: string
+      last_name:
+        example: User
+        maxLength: 50
+        minLength: 1
+        type: string
+      role:
+        enum:
+        - yajman
+        - pandit
+        example: yajman
+        type: string
+      username:
+        example: syntheticuser
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - first_name
+    - last_name
+    - role
+    type: object
+  StoryAuthorDTO:
+    properties:
+      avatarUrl:
+        type: string
+      displayName:
+        type: string
+      id:
+        type: string
+      key:
+        type: string
+      type:
+        type: string
+      username:
+        type: string
+      verified:
+        type: boolean
+    type: object
+  StoryResponse:
+    properties:
+      action_label:
+        type: string
+      action_url:
+        type: string
+      author:
+        $ref: '#/definitions/StoryAuthorDTO'
+      caption:
+        type: string
+      expires_at:
+        type: integer
+      id:
+        type: string
+      media_type:
+        type: string
+      media_url:
+        type: string
+      priority:
+        type: integer
+      published_at:
+        type: integer
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+    type: object
+  SubmitFeedbackRequest:
+    properties:
+      comment:
+        type: string
+      rating:
+        maximum: 5
+        minimum: 1
+        type: integer
+    required:
+    - rating
+    type: object
+  UnregisterDeviceTokenRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  UpdateEventRequest:
+    properties:
+      address:
+        example: 12 MG Road, Bengaluru
+        type: string
+      ceremony_type:
+        example: custom
+        type: string
+      custom_ceremony_description:
+        example: Updated ritual notes or vidhi details.
+        type: string
+      custom_ceremony_name:
+        example: Gudli Pooja
+        type: string
+      description:
+        example: Updated logistics note.
+        type: string
+      event_date:
+        example: "2026-06-16"
+        type: string
+      latitude:
+        example: 12.9716
+        type: number
+      longitude:
+        example: 77.5946
+        type: number
+    type: object
+  UpdateFeeConfigRequest:
+    properties:
+      ceremony_type:
+        type: string
+      fee_amount:
+        type: number
+      fee_type:
+        type: string
+      is_active:
+        type: boolean
+    type: object
+  UpdateLeadStatusRequest:
+    properties:
+      status:
+        type: string
+    type: object
+  UserInfo:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      first_name:
+        example: Synthetic
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      last_name:
+        example: User
+        type: string
+      phone:
+        example: "+919999999999"
+        type: string
+      profile_photo_url:
+        example: https://cdn.medha.app/photos/abc.jpg
+        type: string
+      role:
+        example: yajman
+        type: string
+    type: object
+info:
+  contact:
+    email: support@medha.app
+    name: Medha Backend Team
+    url: https://medha.app
+  description: Backend API for the Medha platform. V2 Authentication (OTP-based),
+    User Profiles, Events, Matching, and more.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://swagger.io/terms/
+  title: Medha API V2
+  version: 2.0.0
+paths:
+  /.well-known/jwks.json:
+    get:
+      description: Returns the public keys in JWKS format for verifying JWTs issued
+        by Medha.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get JWKS
+      tags:
+      - auth-v2
+  /api/v2/admin/analytics/overview:
+    get:
+      description: Retrieve overview charts, growth indexes, user states breakdown,
+        and posting analytics.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Analytics overview data
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Analytics overview
+      tags:
+      - admin
+  /api/v2/admin/assignment/dashboard:
+    get:
+      description: Overview metrics for assignment engine and leads.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dashboard metrics
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Assignment dashboard
+      tags:
+      - admin
+  /api/v2/admin/bookings:
+    get:
+      description: Returns all event-pandit matches with details.
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of bookings
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List bookings
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new booking (match).
+      parameters:
+      - description: Booking data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Booking created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create booking
+      tags:
+      - admin
+  /api/v2/admin/bookings/{id}:
+    delete:
+      description: Deletes a booking from the database.
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete booking
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update fields of a booking (match).
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Booking data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Booking updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update booking
+      tags:
+      - admin
+  /api/v2/admin/buckets:
+    get:
+      description: Returns a list of buckets managed by the system.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of buckets
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List buckets
+      tags:
+      - admin
+  /api/v2/admin/buckets/{bucket}/objects:
+    delete:
+      description: Deletes a specific object from a managed bucket.
+      parameters:
+      - description: Bucket name
+        in: path
+        name: bucket
+        required: true
+        type: string
+      - description: Object key
+        in: query
+        name: key
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete bucket object
+      tags:
+      - admin
+    get:
+      description: Returns a list of objects in the specified bucket.
+      parameters:
+      - description: Bucket name
+        in: path
+        name: bucket
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of objects
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List bucket objects
+      tags:
+      - admin
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads a file to the specified bucket.
+      parameters:
+      - description: Bucket name
+        in: path
+        name: bucket
+        required: true
+        type: string
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Preserve original filename
+        in: query
+        name: preserve_name
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Upload successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    key:
+                      type: string
+                    url:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Upload bucket object
+      tags:
+      - admin
+  /api/v2/admin/buckets/{bucket}/stats:
+    get:
+      description: Returns object count and total size for a managed bucket.
+      parameters:
+      - description: Bucket name
+        in: path
+        name: bucket
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bucket stats
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    bucket:
+                      type: string
+                    total_objects:
+                      type: integer
+                    total_size:
+                      type: integer
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Bucket statistics
+      tags:
+      - admin
+  /api/v2/admin/buckets/{bucket}/url:
+    get:
+      description: Returns the public accessibility URL for a specific object key.
+      parameters:
+      - description: Bucket name
+        in: path
+        name: bucket
+        required: true
+        type: string
+      - description: Object key
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Object URL
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    url:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Get bucket object URL
+      tags:
+      - admin
+  /api/v2/admin/ceremony-logos:
+    get:
+      description: Returns all festival logos from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of festival logos
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List festival logos
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new festival logo record.
+      parameters:
+      - description: Logo data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Logo created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create festival logo
+      tags:
+      - admin
+  /api/v2/admin/ceremony-logos/{id}:
+    delete:
+      description: Deletes a festival logo from the database.
+      parameters:
+      - description: Logo ID or slug
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Logo deleted
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    status:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete festival logo
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update festival logo fields.
+      parameters:
+      - description: Logo ID or slug
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Logo data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logo updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update festival logo
+      tags:
+      - admin
+  /api/v2/admin/ceremony-logos/presign:
+    post:
+      consumes:
+      - application/json
+      description: Generates a presigned URL for uploading a festival logo.
+      parameters:
+      - description: Presign request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            file_name:
+              type: string
+            slug:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Presigned URL
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    object_key:
+                      type: string
+                    public_url:
+                      type: string
+                    upload_url:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Presign logo upload
+      tags:
+      - admin
+  /api/v2/admin/conversations:
+    get:
+      description: Returns all chat conversations with metadata.
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of conversations
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List conversations
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new chat conversation.
+      parameters:
+      - description: Conversation data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Conversation created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create conversation
+      tags:
+      - admin
+  /api/v2/admin/conversations/{id}:
+    delete:
+      description: Deletes a conversation from the database.
+      parameters:
+      - description: Conversation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete conversation
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update fields of a conversation.
+      parameters:
+      - description: Conversation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Conversation data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Conversation updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update conversation
+      tags:
+      - admin
+  /api/v2/admin/events:
+    get:
+      description: Returns up to 500 events from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of events
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List events
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new event record.
+      parameters:
+      - description: Event data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Event created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create event
+      tags:
+      - admin
+  /api/v2/admin/events/{eventId}/eligible-pandits:
+    get:
+      description: Returns pandits matching the event's ceremony type and location,
+        excluding already-pushed pandits.
+      parameters:
+      - description: Event ID
+        in: path
+        name: eventId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Eligible pandits list
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List eligible pandits for event
+      tags:
+      - admin
+  /api/v2/admin/events/{id}:
+    delete:
+      description: Soft-deletes an event. Returns 404 if event not found.
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Event deleted
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete event
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update event fields. Returns 404 if event not found.
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Event data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update event
+      tags:
+      - admin
+  /api/v2/admin/feed:
+    get:
+      description: Returns official posts authored by Medha App with cursor pagination.
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Paging limit (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of official posts
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/MedhaFeedPostResponse'
+                  type: array
+              type: object
+      security:
+      - AdminToken: []
+      summary: List official Medha App feed posts
+      tags:
+      - admin-feed
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post in the feed authored by the verified official
+        Medha App system user.
+      parameters:
+      - description: Post content & media
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/MedhaFeedPostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Post created successfully
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/MedhaFeedPostResponse'
+              type: object
+      security:
+      - AdminToken: []
+      summary: Create a Medha App official feed post
+      tags:
+      - admin-feed
+  /api/v2/admin/feed/{id}:
+    delete:
+      description: Soft-deletes an official feed post.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Post deleted successfully
+      security:
+      - AdminToken: []
+      summary: Delete official Medha App feed post
+      tags:
+      - admin-feed
+    get:
+      description: Retrieves details of a specific official post by UUID.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post details
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/MedhaFeedPostResponse'
+              type: object
+      security:
+      - AdminToken: []
+      summary: Get official Medha App feed post
+      tags:
+      - admin-feed
+    put:
+      consumes:
+      - application/json
+      description: Modifies content, image, or tags of an existing official feed post.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated post content
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/MedhaFeedPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post updated successfully
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/MedhaFeedPostResponse'
+              type: object
+      security:
+      - AdminToken: []
+      summary: Update official Medha App feed post
+      tags:
+      - admin-feed
+  /api/v2/admin/fees:
+    get:
+      description: Fetch all platform fee configurations.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Fee configs
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/FeeConfigResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List fee configurations
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Create a new platform fee configuration.
+      parameters:
+      - description: Fee config data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateFeeConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Fee config created
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create fee config
+      tags:
+      - admin
+  /api/v2/admin/fees/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing platform fee configuration.
+      parameters:
+      - description: Fee Config ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateFeeConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update fee config
+      tags:
+      - admin
+  /api/v2/admin/festivals:
+    get:
+      description: Returns all festivals from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of festivals with id, festival, date
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List festivals
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new festival record.
+      parameters:
+      - description: Festival data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            allOf:
+            - {}
+            - properties:
+                date:
+                  format: int64
+                  type: integer
+                festival:
+                  type: string
+              type: object
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Festival created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create festival
+      tags:
+      - admin
+  /api/v2/admin/festivals/{id}:
+    delete:
+      description: Deletes a festival record. Returns 404 if festival not found.
+      parameters:
+      - description: Festival ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Festival deleted
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Festival not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete festival
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update festival fields. Returns 404 if festival not found.
+      parameters:
+      - description: Festival ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Festival data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            allOf:
+            - {}
+            - properties:
+                date:
+                  format: int64
+                  type: integer
+                festival:
+                  type: string
+              type: object
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Festival updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Festival not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update festival
+      tags:
+      - admin
+  /api/v2/admin/leads:
+    get:
+      description: Fetch all job leads with optional filters.
+      parameters:
+      - description: Page size (default 50)
+        in: query
+        name: limit
+        type: integer
+      - description: Page offset (default 0)
+        in: query
+        name: offset
+        type: integer
+      - description: Filter by status
+        in: query
+        name: status
+        type: string
+      - description: Filter by source
+        in: query
+        name: source
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Job leads list
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List job leads
+      tags:
+      - admin
+  /api/v2/admin/leads/{id}:
+    get:
+      description: Fetch a single job lead by ID.
+      parameters:
+      - description: Job Lead ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Job lead details
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Get job lead
+      tags:
+      - admin
+  /api/v2/admin/leads/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Admin updates the status of a job lead.
+      parameters:
+      - description: Job Lead ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Status update
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateLeadStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update lead status
+      tags:
+      - admin
+  /api/v2/admin/leads/assign:
+    post:
+      consumes:
+      - application/json
+      description: Admin manually assigns a Pandit to an event.
+      parameters:
+      - description: Assignment data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ManualAssignRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Assignment created
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Manually assign Pandit
+      tags:
+      - admin
+  /api/v2/admin/leads/event/{eventId}:
+    get:
+      description: Fetch all job leads for a specific event.
+      parameters:
+      - description: Event ID
+        in: path
+        name: eventId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event leads
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List leads for event
+      tags:
+      - admin
+  /api/v2/admin/leads/finalize:
+    post:
+      consumes:
+      - application/json
+      description: Transition lead to accepted, create match and conversation workspace,
+        and log the platform fee.
+      parameters:
+      - description: Finalize data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/FinalizeAssignmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Assignment finalized
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Finalize lead assignment
+      tags:
+      - admin
+  /api/v2/admin/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate admin user and return an access token.
+      parameters:
+      - description: Admin credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            password:
+              type: string
+            username:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    access_token:
+                      type: string
+                    token_type:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "503":
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Admin login
+      tags:
+      - admin
+  /api/v2/admin/media/presign:
+    post:
+      consumes:
+      - application/json
+      description: Generates a presigned URL for uploading media to S3-compatible
+        storage.
+      parameters:
+      - description: Presign request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            bucket:
+              type: string
+            filename:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Presigned URL
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    expires_in:
+                      type: integer
+                    object_key:
+                      type: string
+                    public_url:
+                      type: string
+                    upload_url:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Presign media upload
+      tags:
+      - admin
+  /api/v2/admin/monetization/summary:
+    get:
+      description: Get monetization dashboard metrics, total revenue, and active ads
+        count.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Summary metrics
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Monetization summary
+      tags:
+      - admin
+  /api/v2/admin/monetization/users/{id}/premium:
+    post:
+      consumes:
+      - application/json
+      description: Grant premium benefits, badge, and configure premium features JSON
+        block.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Premium Configurations
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SetPremiumRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Set user premium status
+      tags:
+      - admin
+  /api/v2/admin/monitoring:
+    get:
+      description: Returns health status for API, PostgreSQL, S3 storage, and total
+        resource counts.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Monitoring data
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    generated_at:
+                      format: int64
+                      type: integer
+                    services:
+                      items:
+                        additionalProperties: true
+                        type: object
+                      type: array
+                    totals:
+                      additionalProperties: true
+                      type: object
+                    uptime_seconds:
+                      format: int64
+                      type: integer
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: System monitoring
+      tags:
+      - admin
+  /api/v2/admin/notifications:
+    get:
+      description: Returns all notifications across all users.
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of notifications
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List notifications
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a notification for a specific user.
+      parameters:
+      - description: Notification data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Notification created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create notification
+      tags:
+      - admin
+  /api/v2/admin/notifications/{id}:
+    delete:
+      description: Deletes a notification from the database.
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete notification
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update fields of a notification.
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Notification data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Notification updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update notification
+      tags:
+      - admin
+  /api/v2/admin/panchanga:
+    get:
+      description: Returns panchanga records within a date range.
+      parameters:
+      - description: From date (Unix timestamp)
+        in: query
+        name: from
+        type: string
+      - description: To date (Unix timestamp)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of panchanga records
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List panchanga
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new panchanga record.
+      parameters:
+      - description: Panchanga data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Panchanga created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create panchanga
+      tags:
+      - admin
+  /api/v2/admin/panchanga/{id}:
+    delete:
+      description: Soft-deletes a panchanga record by setting deleted_at.
+      parameters:
+      - description: Panchanga ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Panchanga deleted
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    status:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete panchanga
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update panchanga fields.
+      parameters:
+      - description: Panchanga ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Panchanga data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Panchanga updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update panchanga
+      tags:
+      - admin
+  /api/v2/admin/posts:
+    get:
+      description: Returns up to 500 non-deleted social posts with author metadata.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of posts
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List posts
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a social feed post.
+      parameters:
+      - description: Post data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Post created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create post
+      tags:
+      - admin
+  /api/v2/admin/posts/{id}:
+    delete:
+      description: Soft-deletes a social feed post. Returns 404 if post is not found.
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Post deleted
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete post
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update social feed post fields. Returns 404 if post is not found.
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Post data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update post
+      tags:
+      - admin
+  /api/v2/admin/server-stats:
+    get:
+      description: Returns CPU, memory, goroutines, and OS information.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Server statistics
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Server statistics
+      tags:
+      - admin
+  /api/v2/admin/stories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Stories
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/AdminStoryResponse'
+                  type: array
+              type: object
+      security:
+      - AdminToken: []
+      summary: List all official stories
+      tags:
+      - admin-stories
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Story data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/AdminStoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Story created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/AdminStoryResponse'
+              type: object
+      security:
+      - AdminToken: []
+      summary: Create an official story (draft)
+      tags:
+      - admin-stories
+  /api/v2/admin/stories/{id}:
+    delete:
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Story deleted
+      security:
+      - AdminToken: []
+      summary: Delete (soft-delete) a story
+      tags:
+      - admin-stories
+    get:
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Story
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/AdminStoryResponse'
+              type: object
+      security:
+      - AdminToken: []
+      summary: Get an official story
+      tags:
+      - admin-stories
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Story data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/AdminStoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Story updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/AdminStoryResponse'
+              type: object
+      security:
+      - AdminToken: []
+      summary: Update an official story's content/targeting/window
+      tags:
+      - admin-stories
+  /api/v2/admin/stories/{id}/archive:
+    post:
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Story archived
+      security:
+      - AdminToken: []
+      summary: Archive a story
+      tags:
+      - admin-stories
+  /api/v2/admin/stories/{id}/pause:
+    post:
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Story paused
+      security:
+      - AdminToken: []
+      summary: Pause a story
+      tags:
+      - admin-stories
+  /api/v2/admin/stories/{id}/publish:
+    post:
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Story published
+      security:
+      - AdminToken: []
+      summary: Publish (activate) a story
+      tags:
+      - admin-stories
+  /api/v2/admin/summary:
+    get:
+      description: Returns counts for users, events, festivals, panchanga, and logos.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Summary data
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: integer
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Get system summary
+      tags:
+      - admin
+  /api/v2/admin/users:
+    get:
+      description: Returns up to 500 users from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    additionalProperties: true
+                    type: object
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: List users
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Manually create a new user record.
+      parameters:
+      - description: User data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Create user
+      tags:
+      - admin
+  /api/v2/admin/users/{id}:
+    delete:
+      description: Soft-deletes a user. Returns 404 if user not found.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: User deleted
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Delete user
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update user fields. Returns 404 if user not found.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User data
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - AdminToken: []
+      summary: Update user
+      tags:
+      - admin
+  /api/v2/auth/dev-login:
+    post:
+      consumes:
+      - application/json
+      description: Bypasses OTP verification for development. Accepts either a role
+        ("pandit"/"yajman") or a direct phone number from the dev account list. Returns
+        a real JWT + refresh token pair at zero cost.
+      parameters:
+      - description: Login by role or phone
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/DevLoginRequestV2'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Authentication successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/AuthResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Disabled in production or phone not allowed
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Dev-only login bypass
+      tags:
+      - auth-v2
+  /api/v2/auth/dev-users:
+    get:
+      description: Returns all users in the database that have a phone number, sorted
+        by role then first name. Only available in non-production environments.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dev accounts list
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/DevUserDTO'
+                  type: array
+              type: object
+        "403":
+          description: Disabled in production
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: List available dev accounts
+      tags:
+      - auth-v2
+  /api/v2/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Revokes the given refresh token, effectively logging the user out
+        of that session. Idempotent — calling with an already-revoked token returns
+        200.
+      parameters:
+      - description: Refresh token to revoke
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LogoutRequestV2'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Logout (revoke refresh token)
+      tags:
+      - auth-v2
+  /api/v2/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Uses a valid refresh token to obtain a new access + refresh token
+        pair. The old refresh token is revoked (rotation).
+      parameters:
+      - description: Refresh token
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token refreshed
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/RefreshTokenResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Invalid or expired refresh token
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Refresh access token
+      tags:
+      - auth-v2
+  /api/v2/auth/send-otp:
+    post:
+      consumes:
+      - application/json
+      description: Sends a 6-digit OTP via SMS to the given phone number. Rate limited
+        to 3 requests per hour per number.
+      parameters:
+      - description: Phone number in E.164 format
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SendOTPRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OTP sent
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/SendOTPResponse'
+              type: object
+        "400":
+          description: Invalid phone number
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "429":
+          description: Rate limit exceeded
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "503":
+          description: OTP service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Send OTP to phone number
+      tags:
+      - auth-v2
+  /api/v2/auth/verify-otp:
+    get:
+      consumes:
+      - application/json
+      description: 'Validates the 6-digit OTP. Creates a new user if not found, or
+        logs in the existing user. Returns the unified auth response. Note: This is
+        an HTTP GET request, so phone and otp must be sent as query parameters.'
+      parameters:
+      - description: Phone number in E.164 format
+        example: '"+919999999999"'
+        in: query
+        name: phone
+        required: true
+        type: string
+      - description: 6-digit OTP
+        example: '"123456"'
+        in: query
+        name: otp
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Authentication successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/AuthResponse'
+              type: object
+        "400":
+          description: Invalid OTP or phone
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "429":
+          description: Too many attempts
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "503":
+          description: OTP service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Verify OTP code
+      tags:
+      - auth-v2
+  /api/v2/ceremony:
+    get:
+      description: Returns all available ceremony types with display names, logos,
+        and categories. Supports optional fuzzy search via ?q= parameter that matches
+        against slug, display name, category, and description.
+      parameters:
+      - description: Search query for fuzzy filtering (e.g. 'shraadh', 'puja', 'wedding')
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ceremony catalog
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/CeremonyDTO'
+                  type: array
+              type: object
+      summary: List or search ceremony types
+      tags:
+      - event-v2
+  /api/v2/cities/nearby:
+    get:
+      description: Returns a list of seeded cities within a given radius, sorted by
+        distance.
+      parameters:
+      - description: Latitude
+        in: query
+        name: lat
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: lng
+        required: true
+        type: number
+      - description: Radius in km (default 200)
+        in: query
+        name: radius
+        type: integer
+      - description: Max results (default 15)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Nearby cities
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/NearbyCityResult'
+                  type: array
+              type: object
+        "400":
+          description: Missing or invalid parameters
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Get nearby seeded cities
+      tags:
+      - cities
+  /api/v2/cities/search:
+    get:
+      description: Searches seeded cities by name. Falls back to MapMyIndia autocomplete
+        if not found in database.
+      parameters:
+      - description: Search query (min 2 characters)
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: Max results (default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Matching cities
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/City'
+                  type: array
+              type: object
+        "400":
+          description: Missing or invalid query parameter
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Search cities by name
+      tags:
+      - cities
+  /api/v2/conversation:
+    get:
+      description: Returns the user's conversation inbox sorted by most recent activity.
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Conversations
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/ConversationResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List my conversations
+      tags:
+      - messaging
+    post:
+      consumes:
+      - application/json
+      description: Starts a new conversation thread between participants. If a direct
+        conversation already exists, returns the existing one.
+      parameters:
+      - description: Conversation details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateConversationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Existing conversation returned
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ConversationResponse'
+              type: object
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ConversationResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Create a conversation
+      tags:
+      - messaging
+  /api/v2/conversation/{id}:
+    get:
+      description: Returns a conversation with its participants. Caller must be a
+        participant.
+      parameters:
+      - description: Conversation UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Conversation
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ConversationResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Not a participant
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get conversation details
+      tags:
+      - messaging
+  /api/v2/conversation/{id}/message:
+    get:
+      description: Returns paginated messages in a conversation, newest first. Caller
+        must be a participant.
+      parameters:
+      - description: Conversation UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 25)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/MessageResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Not a participant
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List messages in a conversation
+      tags:
+      - messaging
+    post:
+      consumes:
+      - application/json
+      description: Sends a message to a conversation via REST. For real-time use WebSocket
+        instead.
+      parameters:
+      - description: Conversation UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Message content
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SendMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Message sent
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/MessageResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Not a participant
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Send a message (REST fallback)
+      tags:
+      - messaging
+  /api/v2/conversation/{id}/read:
+    put:
+      description: Marks all messages in the conversation as read for the caller.
+      parameters:
+      - description: Conversation UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Marked as read
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Mark conversation as read
+      tags:
+      - messaging
+  /api/v2/event:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new ceremony event at the given location. Use ceremony_type="custom"
+        with custom_ceremony_name and custom_ceremony_description for rituals not
+        present in the catalog, such as Gudli Pooja.
+      parameters:
+      - description: Event details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateEventRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Event created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/EventResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Create an event
+      tags:
+      - event-v2
+  /api/v2/event/{id}:
+    delete:
+      description: Cancels an existing event. Only the event owner can cancel it.
+      parameters:
+      - description: Event UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event cancelled
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not event owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Cancel event
+      tags:
+      - event-v2
+    get:
+      description: Returns event details by UUID.
+      parameters:
+      - description: Event UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event details
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/EventResponse'
+              type: object
+        "400":
+          description: Invalid event ID
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get event by ID
+      tags:
+      - event-v2
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing event. Only the event owner can update it.
+        All fields are optional.
+      parameters:
+      - description: Event UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Fields to update
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateEventRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/EventResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not event owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Update event
+      tags:
+      - event-v2
+  /api/v2/event/{id}/interest:
+    get:
+      description: Returns paginated pandit interests for a specific event. Only the
+        event owner can view.
+      parameters:
+      - description: Event UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Interests list
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/InterestDetailResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not event owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Event not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List interests for an event
+      tags:
+      - interest-v2
+  /api/v2/event/mine:
+    get:
+      description: Returns paginated list of events created by the authenticated user.
+        Supports cursor-based pagination.
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: My events
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/EventResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List my events
+      tags:
+      - event-v2
+  /api/v2/event/nearby:
+    get:
+      description: |-
+        Returns events near the given coordinates. Supports radius-based search (lat/lng/radius_km) or bounding box (min_lat/max_lat/min_lng/max_lng).
+        NOTE: distance_km is calculated relative to the authenticated user's stored home location if available.
+      parameters:
+      - description: Latitude
+        in: query
+        name: lat
+        type: number
+      - description: Longitude
+        in: query
+        name: lng
+        type: number
+      - description: Search radius in km (default 25)
+        in: query
+        name: radius_km
+        type: integer
+      - description: Bounding box min latitude
+        in: query
+        name: min_lat
+        type: number
+      - description: Bounding box max latitude
+        in: query
+        name: max_lat
+        type: number
+      - description: Bounding box min longitude
+        in: query
+        name: min_lng
+        type: number
+      - description: Bounding box max longitude
+        in: query
+        name: max_lng
+        type: number
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Nearby events
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/EventNearbyResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad request — missing coordinates
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Find nearby events
+      tags:
+      - event-v2
+  /api/v2/feed:
+    get:
+      description: Returns paginated posts from the community feed, newest first.
+        Supports cursor-based pagination for use with Paging 3. Pass the `next_cursor`
+        from the previous response as `cursor` for the next page.
+      parameters:
+      - description: Pagination cursor from previous response
+        in: query
+        name: cursor
+        type: string
+      - description: Number of posts per page (1-50, default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated feed
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/FeedPostResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List community feed
+      tags:
+      - feed-v2
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post in the community feed. At least one of `content`
+        or `image_urls` must be provided.
+      parameters:
+      - description: Post creation payload
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            content:
+              type: string
+            image_urls:
+              items:
+                type: string
+              type: array
+            tags:
+              items:
+                type: string
+              type: array
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Post created successfully
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/FeedPostResponse'
+              type: object
+        "400":
+          description: Empty post or invalid body
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Create feed post
+      tags:
+      - feed-v2
+  /api/v2/feed/{id}:
+    delete:
+      description: Soft-deletes a community feed post if the authenticated user is
+        the author.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Post deleted successfully
+        "400":
+          description: Invalid post ID
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Not authorized to delete this post
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Delete feed post
+      tags:
+      - feed-v2
+    get:
+      description: Returns a single post by its UUID, including like state for the
+        authenticated user.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post found
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/FeedPostResponse'
+              type: object
+        "400":
+          description: Invalid post ID
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get feed post
+      tags:
+      - feed-v2
+  /api/v2/feed/{id}/like:
+    delete:
+      description: Removes the authenticated user's like from the specified post.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post unliked
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "400":
+          description: Invalid post ID or not liked
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Unlike a post
+      tags:
+      - feed-v2
+    post:
+      description: Adds a like from the authenticated user to the specified post.
+      parameters:
+      - description: Post UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post liked
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "400":
+          description: Invalid post ID
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "409":
+          description: Already liked
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Like a post
+      tags:
+      - feed-v2
+  /api/v2/feed/user/{authorId}:
+    get:
+      description: Returns paginated posts authored by a specific user. Supports cursor-based
+        pagination.
+      parameters:
+      - description: Author UUID
+        in: path
+        name: authorId
+        required: true
+        type: string
+      - description: Pagination cursor from previous response
+        in: query
+        name: cursor
+        type: string
+      - description: Number of posts per page (default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated author posts
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/FeedPostResponse'
+                  type: array
+              type: object
+        "400":
+          description: Invalid author ID
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List posts by user
+      tags:
+      - feed-v2
+  /api/v2/help:
+    post:
+      description: Creates a new help/support conversation for the authenticated user.
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Help conversation created
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ConversationResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Start a help conversation
+      tags:
+      - messaging
+  /api/v2/interest:
+    post:
+      consumes:
+      - application/json
+      description: Allows a pandit to express interest in a yajman's event.
+      parameters:
+      - description: Interest details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ExpressInterestRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Interest expressed
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/InterestResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "409":
+          description: Already expressed interest
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Express interest in an event
+      tags:
+      - interest-v2
+  /api/v2/interest/{id}/accept:
+    put:
+      description: Allows a yajman to accept a pandit's interest (moving it to connected,
+        unlocking chat).
+      parameters:
+      - description: Interest UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Interest updated to connected
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/InterestResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not event owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Interest not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "409":
+          description: Conflict — interest already resolved
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Accept interest
+      tags:
+      - interest-v2
+  /api/v2/interest/{id}/book:
+    put:
+      description: Allows a yajman to book a specific connected pandit (moving interest
+        to accepted, rejecting others, marking event booked).
+      parameters:
+      - description: Interest UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Booking confirmed, event booked
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/InterestResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not event owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Interest not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "409":
+          description: Conflict — interest already booked/rejected
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Confirm booking
+      tags:
+      - interest-v2
+  /api/v2/interest/{id}/respond:
+    put:
+      consumes:
+      - application/json
+      description: Allows a yajman to accept or reject a pandit's interest in their
+        event.
+      parameters:
+      - description: Interest UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Accept or reject
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/RespondToInterestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Interest updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/InterestResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not event owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Interest not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Respond to interest
+      tags:
+      - interest-v2
+  /api/v2/interest/{id}/withdraw:
+    put:
+      description: Allows a pandit to withdraw their interest, marking themselves
+        unavailable.
+      parameters:
+      - description: Interest UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Interest withdrawn
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/InterestResponse'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not interest owner
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Interest not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "409":
+          description: Conflict — interest already resolved
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Withdraw interest
+      tags:
+      - interest-v2
+  /api/v2/interest/mine:
+    get:
+      description: Returns paginated list of interests expressed by the authenticated
+        pandit.
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: My interests
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/InterestDetailResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List my interests
+      tags:
+      - interest-v2
+  /api/v2/leads/{id}/accept:
+    put:
+      description: Pandit accepts a job lead. Platform fee is charged.
+      parameters:
+      - description: Lead ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lead accepted
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Accept a job lead
+      tags:
+      - lead
+  /api/v2/leads/{id}/decline:
+    put:
+      description: Pandit declines a job lead. No fee is charged.
+      parameters:
+      - description: Lead ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lead declined
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Decline a job lead
+      tags:
+      - lead
+  /api/v2/leads/mine:
+    get:
+      description: Pandit views their incoming job leads.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Leads list
+          schema:
+            $ref: '#/definitions/DataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List my leads
+      tags:
+      - lead
+  /api/v2/location/nearby:
+    get:
+      description: Returns nearby points of interest (temples, venues) using MapMyIndia
+        Atlas. Requires a valid JWT bearer token.
+      parameters:
+      - description: Latitude
+        in: query
+        name: lat
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: lng
+        required: true
+        type: number
+      - default: temple,venue
+        description: Comma-separated keywords
+        in: query
+        name: keywords
+        type: string
+      - default: 5000
+        description: Radius in meters
+        in: query
+        name: radius
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Nearby POIs
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "400":
+          description: Missing query parameter
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "502":
+          description: Location service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Search for nearby POIs
+      tags:
+      - location-v2
+  /api/v2/location/reverse:
+    get:
+      description: Returns the formatted address and location details for given latitude
+        and longitude coordinates. Requires a valid JWT bearer token.
+      parameters:
+      - description: Latitude
+        in: query
+        name: lat
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: lng
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reverse Geocode Results
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/RevGeocodeResponse'
+              type: object
+        "400":
+          description: Missing or invalid query parameter
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "502":
+          description: Location service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Reverse Geocode
+      tags:
+      - location-v2
+  /api/v2/location/route:
+    get:
+      description: Returns step-by-step driving directions between coordinates. Requires
+        a valid JWT bearer token.
+      parameters:
+      - description: Semicolon-separated lng,lat pairs
+        in: query
+        name: waypoints
+        required: true
+        type: string
+      - description: Return alternatives (1=yes, default 0)
+        in: query
+        name: alternatives
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Driving route
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "400":
+          description: Missing query parameter
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "502":
+          description: Location service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get driving route waypoints
+      tags:
+      - location-v2
+  /api/v2/location/suggest:
+    get:
+      description: Returns up to 10 place suggestions matching the query string using
+        MapMyIndia Atlas API. Requires a valid JWT bearer token.
+      parameters:
+      - description: Search query (e.g. 'Aruna Hospital', 'Bangalore')
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: Region code (default IND)
+        in: query
+        name: region
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Autocomplete suggestions
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "400":
+          description: Missing query parameter
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "502":
+          description: Location service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Location auto-suggest
+      tags:
+      - location-v2
+  /api/v2/location/token:
+    get:
+      description: Returns a valid access token for client-side MapMyIndia SDK use.
+        Requires a valid JWT bearer token.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access token
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "502":
+          description: Location service unavailable
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get MapMyIndia access token
+      tags:
+      - location-v2
+  /api/v2/match/{id}:
+    get:
+      description: Returns the full details of a match including both parties' info.
+        Only the yajman or pandit can access.
+      parameters:
+      - description: Match UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Match details
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/MatchDetailResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not a party
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Match not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get match details
+      tags:
+      - match-v2
+  /api/v2/match/{id}/accept:
+    put:
+      description: Transitions a match from 'created' to 'matched'. Only the yajman
+        can accept.
+      parameters:
+      - description: Match UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Match accepted
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Match not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Accept match
+      tags:
+      - match-v2
+  /api/v2/match/{id}/activate:
+    put:
+      description: Transitions a match from 'matched' to 'active' (ceremony in progress).
+      parameters:
+      - description: Match UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Match activated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Match not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Activate match
+      tags:
+      - match-v2
+  /api/v2/match/{id}/complete:
+    put:
+      description: Transitions a match from 'active' to 'completed'. Only the yajman
+        can complete.
+      parameters:
+      - description: Match UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Match completed
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Match not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Complete match
+      tags:
+      - match-v2
+  /api/v2/match/{id}/feedback:
+    post:
+      consumes:
+      - application/json
+      description: Allows a yajman to rate and comment on a pandit's service after
+        match completion. Returns updated badge info.
+      parameters:
+      - description: Match UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Rating and comment
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SubmitFeedbackRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Feedback submitted
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "400":
+          description: Bad request — match not completed
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — not the yajman
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Match not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "409":
+          description: Feedback already submitted
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Submit feedback for a match
+      tags:
+      - trust-v2
+  /api/v2/match/mine:
+    get:
+      description: Returns paginated matches for the authenticated user (as yajman
+        or pandit).
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: My matches
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/MatchDetailResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List my matches
+      tags:
+      - match-v2
+  /api/v2/notification:
+    get:
+      description: Returns a paginated list of notifications for the authenticated
+        user, including unread count.
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Notifications
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/NotificationResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List my notifications
+      tags:
+      - notification-v2
+  /api/v2/notification/{id}/read:
+    put:
+      description: Updates a single notification's status to read.
+      parameters:
+      - description: Notification UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Marked as read
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Notification not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Mark notification as read
+      tags:
+      - notification-v2
+  /api/v2/notification/device-token:
+    delete:
+      consumes:
+      - application/json
+      description: Marks a device push token as inactive.
+      parameters:
+      - description: Token to unregister
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/UnregisterDeviceTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token unregistered
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Unregister device push token
+      tags:
+      - notification-v2
+    post:
+      consumes:
+      - application/json
+      description: Associates a push token (FCM or APNs) with the user's account for
+        the given platform.
+      parameters:
+      - description: Token details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/RegisterDeviceTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token registered
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Register device push token
+      tags:
+      - notification-v2
+  /api/v2/notification/read-all:
+    put:
+      description: Marks all of the authenticated user's unread notifications as read.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All marked as read
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data: {}
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Mark all notifications as read
+      tags:
+      - notification-v2
+  /api/v2/panchanga:
+    get:
+      description: Returns full Hindu calendar details for a given date (YYYY-MM-DD).
+        No authentication required.
+      parameters:
+      - description: Date in YYYY-MM-DD format
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Panchanga for the date
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PanchangaResponse'
+              type: object
+        "400":
+          description: Invalid date format
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: No data for that date
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Panchanga by Date
+      tags:
+      - panchanga-v2
+  /api/v2/panchanga/festivals:
+    get:
+      description: Returns upcoming Hindu festivals from today, ordered by date. Use
+        `limit` to control results (default 100, max 500). No authentication required.
+      parameters:
+      - description: Max number of festivals to return (default 100)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Festival list
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/FestivalResponse'
+                  type: array
+              type: object
+      summary: Upcoming Festivals
+      tags:
+      - panchanga-v2
+  /api/v2/panchanga/range:
+    get:
+      description: Returns full Hindu calendar details for every day between `from`
+        and `to` (YYYY-MM-DD, max 366 days). No authentication required.
+      parameters:
+      - description: Start date YYYY-MM-DD
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: End date YYYY-MM-DD
+        in: query
+        name: to
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Panchanga list
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/PanchangaResponse'
+                  type: array
+              type: object
+        "400":
+          description: Invalid params
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Panchanga Range
+      tags:
+      - panchanga-v2
+  /api/v2/panchanga/today:
+    get:
+      description: Returns the Hindu calendar details for today (IST). No authentication
+        required.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Today's panchanga
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PanchangaResponse'
+              type: object
+        "404":
+          description: No data for today
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Today's Panchanga
+      tags:
+      - panchanga-v2
+  /api/v2/pandit/{id}:
+    get:
+      description: Returns the professional profile of a specific pandit by their
+        user UUID.
+      parameters:
+      - description: User UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Pandit profile
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PanditProfileResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Pandit not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get pandit by user ID
+      tags:
+      - pandit-v2
+  /api/v2/pandit/{id}/badge:
+    get:
+      description: Returns the current badge tier, average rating, and ceremony counts
+        for a pandit.
+      parameters:
+      - description: Pandit User UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Badge data
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/BadgeResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Badge not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get pandit badge and reputation
+      tags:
+      - trust-v2
+  /api/v2/pandit/nearby:
+    get:
+      description: Returns a paginated list of pandits near a location. Supports filtering
+        by availability, tradition, and ceremony type.
+      parameters:
+      - description: Latitude
+        in: query
+        name: lat
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: lng
+        required: true
+        type: number
+      - description: Radius in km (default 25)
+        in: query
+        name: radius_km
+        type: integer
+      - description: Filter to available only
+        in: query
+        name: available_only
+        type: boolean
+      - description: Filter by tradition
+        in: query
+        name: parampara
+        type: string
+      - description: Comma-separated ceremony types
+        in: query
+        name: ceremony_type
+        type: string
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Nearby pandits
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/PanditNearbyResponse'
+                  type: array
+              type: object
+        "400":
+          description: Missing lat/lng
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Find nearby pandits
+      tags:
+      - pandit-v2
+  /api/v2/pandit/profile:
+    get:
+      description: Returns the authenticated pandit's full professional profile merged
+        with their user info. Returns 403 if the user is not a pandit and 404 if no
+        profile has been set up yet.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Pandit profile
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PanditProfileFullResponse'
+              type: object
+        "401":
+          description: Unauthorized — missing or invalid JWT
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — user is not a pandit
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Pandit profile not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get pandit profile
+      tags:
+      - pandit-v2
+    put:
+      consumes:
+      - application/json
+      description: Creates or updates the professional profile of the authenticated
+        pandit. Only users with role=pandit can call this endpoint. All fields are
+        optional — send only what you want to update.
+      parameters:
+      - description: Pandit profile data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SetupPanditProfileRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PanditProfileFullResponse'
+              type: object
+        "400":
+          description: Validation error — invalid availability_status, service_radius_km
+            out of range, or field too long
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized — missing or invalid JWT
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden — only pandit accounts can update a pandit profile
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Setup or update pandit profile
+      tags:
+      - pandit-v2
+  /api/v2/pandit/service-cities:
+    get:
+      description: Returns the list of serviceable cities configured by the authenticated
+        pandit.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Enriched service cities
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ServiceCitiesResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Profile not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get pandit service cities
+      tags:
+      - pandit-v2
+    put:
+      consumes:
+      - application/json
+      description: Replaces the pandit's home and additional serviceable cities.
+      parameters:
+      - description: Service cities payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SetServiceCitiesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Enriched service cities
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ServiceCitiesResponse'
+              type: object
+        "400":
+          description: Validation/limit/distance errors
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Profile or city not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Set pandit service cities
+      tags:
+      - pandit-v2
+  /api/v2/public/profile/{username}:
+    get:
+      description: Returns safe public details of a user profile by username. This
+        endpoint is public (no JWT required).
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Public profile details
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PublicProfileResponse'
+              type: object
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Profile not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Get public profile details
+      tags:
+      - user-v2
+  /api/v2/storage/confirm:
+    post:
+      consumes:
+      - application/json
+      description: Confirms that the client successfully uploaded a file via a pre-signed
+        URL and links it in the database if applicable.
+      parameters:
+      - description: Confirm request info
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ConfirmRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Upload confirmed
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ConfirmResponseDTO'
+              type: object
+        "400":
+          description: Bad request (upload not found)
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "403":
+          description: Forbidden (key does not belong to user)
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Confirm media upload
+      tags:
+      - storage-v2
+  /api/v2/storage/presign:
+    post:
+      consumes:
+      - application/json
+      description: Generates a pre-signed PUT URL for uploading media to S3-compatible
+        storage directly.
+      parameters:
+      - description: Presign request info
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PresignRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Presigned URL details
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/PresignResponseDTO'
+              type: object
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "422":
+          description: Unprocessable entity (invalid content type)
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get pre-signed upload URL
+      tags:
+      - storage-v2
+  /api/v2/stories:
+    get:
+      description: Returns active, eligible official stories for the authenticated
+        viewer, deterministically ordered.
+      parameters:
+      - description: Pagination cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Page size (default 20)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Stories
+          schema:
+            allOf:
+            - $ref: '#/definitions/ListResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/StoryResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: List active official stories for the viewer
+      tags:
+      - stories
+  /api/v2/stories/{id}/view:
+    post:
+      description: Idempotently records that the authenticated viewer has seen this
+        story.
+      parameters:
+      - description: Story UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: View recorded
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Story not found or not eligible
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Record a story view
+      tags:
+      - stories
+  /api/v2/user/check-username:
+    get:
+      description: Checks if a username is already taken. This endpoint is public.
+      parameters:
+      - description: Username to check
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Username check result
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/CheckUsernameExistsResponse'
+              type: object
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      summary: Check username availability
+      tags:
+      - user-v2
+  /api/v2/user/me:
+    delete:
+      description: Permanently deletes the authenticated user's account and all associated
+        data.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Account deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to delete account. Please try again.
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete user account
+      tags:
+      - user-v2
+  /api/v2/user/me/location:
+    get:
+      description: Returns the currently stored home location for the authenticated
+        user. Used to seed the map on startup.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User location
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/LocationResponseV2'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: Location not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get user location
+      tags:
+      - user-v2
+    put:
+      consumes:
+      - application/json
+      description: Updates the user's geographic location natively translating to
+        PostGIS coordinates. Returns the full profile.
+      parameters:
+      - description: Location data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LocationUpdateRequestV2'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Location updated
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ProfileResponse'
+              type: object
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Update user location
+      tags:
+      - user-v2
+  /api/v2/user/me/profile:
+    get:
+      description: Returns the current user's profile including pandit profile if
+        applicable.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ProfileResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - user-v2
+    post:
+      consumes:
+      - application/json
+      description: Sets the user's first name, last name, and role, marking the profile
+        as complete.
+      parameters:
+      - description: Profile data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SetupProfileRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile set up
+          schema:
+            allOf:
+            - $ref: '#/definitions/DataResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/ProfileResponse'
+              type: object
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ProblemDetail'
+      security:
+      - BearerAuth: []
+      summary: Setup user profile
+      tags:
+      - user-v2
+securityDefinitions:
+  AdminToken:
+    description: Type "Bearer" followed by a space and an admin JWT or break-glass
+      token.
+    in: header
+    name: Authorization
+    type: apiKey
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
+tags:
+- name: auth-v2
+- name: user-v2
+- name: event-v2
+- name: feed-v2
+- name: interest-v2
+- name: location-v2
+- name: match-v2
+- name: messaging
+- name: notification-v2
+- name: panchanga-v2
+- name: pandit-v2
+- name: storage-v2
+- name: trust-v2
+- name: Connections
+- name: Events
+- name: Metadata
+- name: cities
+- name: admin

@@ -1,0 +1,14 @@
+.git
+.github
+.idea
+.vscode
+tmp/
+bin/
+keys/
+.env
+*.log
+*.txt
+bruno/
+postman/
+Dockerfile*
+*.exe

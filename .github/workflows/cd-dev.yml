@@ -1,0 +1,23 @@
+# ============================================================
+#  CD — Dev Environment
+#  Triggers on push to dev branch. Calls the reusable CD workflow.
+# ============================================================
+name: CD - Dev
+run-name: "CD - Dev"
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/cd.yml
+    with:
+      environment: dev
+      git_sha: ${{ github.sha }}
+    secrets: inherit

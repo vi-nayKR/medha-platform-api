@@ -1,0 +1,723 @@
+{
+    "schema_version": "1.0.0",
+    "project": "medha-api",
+    "module": "github.com/medha/backend",
+    "database": {
+        "engine": "PostgreSQL",
+        "driver": "pgx/v5 (pgxpool)",
+        "migration_tool": "goose/v3",
+        "migration_dialect": "postgres",
+        "extensions": [
+            "uuid-ossp",
+            "pgcrypto",
+            "postgis"
+        ]
+    },
+    "conventions": {
+        "primary_keys": "UUID v4 via uuid_generate_v4()",
+        "timestamps": "Unix epoch BIGINT \u2014 (EXTRACT(EPOCH FROM NOW()))::BIGINT",
+        "soft_deletes": "deleted_at BIGINT nullable column (nil = active)",
+        "updated_at_trigger": "trigger_set_timestamp() \u2014 shared plpgsql function auto-sets updated_at on UPDATE",
+        "geospatial": "PostGIS geography(Point, 4326) \u2014 POINT(longitude, latitude) in SQL, (Latitude, Longitude) in Go",
+        "arrays": "TEXT[] with GIN indexes for containment queries",
+        "id_generation": "Server-side DEFAULT uuid_generate_v4(), not application-generated",
+        "naming": "snake_case for all tables, columns, enums, indexes, and triggers"
+    },
+    "migrations": [
+        {
+            "file": "00001_extensions.sql",
+            "description": "Create required PostgreSQL extensions: uuid-ossp, pgcrypto, postgis"
+        },
+        {
+            "file": "00002_ceremony_catalog.sql",
+            "description": "Create ceremony_catalog reference metadata table",
+            "tables_created": [
+                "ceremony_catalog"
+            ]
+        },
+        {
+            "file": "00003_users_refresh_tokens.sql",
+            "description": "Core user and refresh token tables, trigger_set_timestamp helper, user_role enum, city/state/pincode fields and pandit lookup index, and user update timestamp trigger",
+            "tables_created": [
+                "users",
+                "refresh_tokens"
+            ]
+        },
+        {
+            "file": "00004_pandit_profiles.sql",
+            "description": "Pandit profile table, availability_status enum, availability indexes, and update timestamp trigger",
+            "tables_created": [
+                "pandit_profiles"
+            ]
+        },
+        {
+            "file": "00005_events_interests_matches.sql",
+            "description": "Events, interest expressions, and matches schema, ceremony_type, event_status, interest_status, and match_status enums, plus update triggers and indexes",
+            "tables_created": [
+                "events",
+                "interests",
+                "matches"
+            ]
+        },
+        {
+            "file": "00006_posts_likes_feedback.sql",
+            "description": "Social feed tables: posts, likes, and ceremony feedback, plus pandit badges, badge_tier enum, and auto-badge trigger",
+            "tables_created": [
+                "posts",
+                "likes",
+                "ceremony_feedback",
+                "pandit_badges"
+            ]
+        },
+        {
+            "file": "00007_notifications.sql",
+            "description": "User notification inbox and deduplication log schemas, plus notification_type enum",
+            "tables_created": [
+                "notifications",
+                "notification_log"
+            ]
+        },
+        {
+            "file": "00008_fcm_tokens.sql",
+            "description": "Mobile push tokens schema and trigger",
+            "tables_created": [
+                "fcm_tokens"
+            ]
+        },
+        {
+            "file": "00009_festivals_panchanga.sql",
+            "description": "Festivals and panchanga tables with initial calendar seed data"
+        },
+        {
+            "file": "00010_panchanga_seed.sql",
+            "description": "Additional daily panchanga seed data entries"
+        },
+        {
+            "file": "00011_messaging.sql",
+            "description": "Messaging schema for conversations, participants, and messages, plus conversation_type, and message_content_type enums",
+            "tables_created": [
+                "conversations",
+                "conversation_participants",
+                "messages"
+            ]
+        },
+        {
+            "file": "00012_admin_credentials.sql",
+            "description": "Admin credentials table for secure config storage and seeded default entries"
+        },
+        {
+            "file": "00013_festival_logos.sql",
+            "description": "Festival logo metadata with canonical slugs, category, description, and display ordering"
+        },
+        {
+            "file": "00014_admin_monitoring.sql",
+            "description": "Admin monitoring table and admin credentials update for MinIO console integration"
+        },
+        {
+            "file": "00015_cleanup_tables.sql",
+            "description": "Database cleanup: drops ceremony_catalog, renames ceremony_feedback to event_feedback, adds description to festivals, replaces admin_request_logs with admin_error_logs",
+            "tables_created": [
+                "event_feedback",
+                "admin_error_logs"
+            ],
+            "tables_deleted": [
+                "ceremony_catalog",
+                "ceremony_feedback",
+                "admin_request_logs"
+            ]
+        },
+        {
+            "file": "00016_monetization.sql",
+            "description": "Database updates for Monetization, Reports, and Analytics: adds premium fields to users, creates ad_campaigns, revenue_transactions, and boosted_posts tables",
+            "tables_created": [
+                "ad_campaigns",
+                "revenue_transactions",
+                "boosted_posts"
+            ]
+        },
+        {
+            "file": "00017_connection_requests.sql",
+            "description": "Create connection_requests table for direct connections flow",
+            "tables_created": [
+                "connection_requests"
+            ]
+        },
+        {
+            "file": "00042_database_cleanup.sql",
+            "description": "Drops unused/duplicate tables from the monetization, admin, and messaging prototypes",
+            "tables_deleted": [
+                "ad_campaign",
+                "ad_campaigns",
+                "admin_credentials",
+                "admin_error_logs",
+                "boosted_posts",
+                "connection_requests",
+                "conversation_participants",
+                "revenue_transactions",
+                "support_emails"
+            ]
+        },
+        {
+            "file": "00045_remove_app_versions.sql",
+            "description": "Removes the in-app update feature (app_versions table, apprelease bounded context, medha-releases MinIO bucket)",
+            "tables_deleted": [
+                "app_versions"
+            ]
+        },
+        {
+            "file": "00048_seed_dev_pandit_profiles.sql",
+            "description": "Backfills pandit_profiles rows for the dev pandit users seeded in 00035_reset_dev_users.sql so they aren't hidden from eligible-pandit search"
+        },
+        {
+            "file": "migrations.go",
+            "description": "Go embed.FS runner \u2014 embeds *.sql files and runs goose.Up at server startup"
+        }
+    ],
+    "enums": {
+        "user_role": {
+            "values": [
+                "yajman",
+                "pandit"
+            ],
+            "go_type": "auth/domain.UserRole"
+        },
+        "availability_status": {
+            "values": [
+                "available",
+                "unavailable"
+            ],
+            "go_type": "user/domain.AvailabilityStatus"
+        },
+        "ceremony_type": {
+            "values": [
+                "shraadh",
+                "grihapravesh",
+                "vivah",
+                "satyanarayan",
+                "mundan",
+                "antim_sanskar",
+                "vastu_shanti",
+                "naamkaran",
+                "upanayana",
+                "bhagwat_katha",
+                "bhoomi_puja",
+                "chandi_homa",
+                "durga_puja",
+                "ganesh_chaturthi",
+                "hanuman_jayanti",
+                "karthik_pournami",
+                "karva_chauth",
+                "krishna_janmashtami",
+                "maha_shivaratri",
+                "navratri",
+                "onam",
+                "ram_navami",
+                "rudra_homa",
+                "akshaya_tritiya",
+                "annaprashan",
+                "dasara",
+                "diwali",
+                "engagement"
+            ],
+            "go_type": "event/domain.CeremonyType"
+        },
+        "event_status": {
+            "values": [
+                "active",
+                "cancelled",
+                "completed",
+                "Created",
+                "Active",
+                "Pending",
+                "Booked",
+                "Completed",
+                "Cancelled"
+            ],
+            "go_type": "event/domain.EventStatus",
+            "note": "Contains legacy lowercase duplicates \u2014 normalization planned"
+        },
+        "interest_status": {
+            "values": [
+                "pending",
+                "accepted",
+                "rejected"
+            ],
+            "go_type": "interest/domain.InterestStatus"
+        },
+        "match_status": {
+            "values": [
+                "created",
+                "matched",
+                "active",
+                "completed",
+                "cancelled"
+            ],
+            "go_type": "matching/domain.MatchStatus"
+        },
+        "badge_tier": {
+            "values": [
+                "pandit_ji",
+                "puja_praveen",
+                "karma_kandi",
+                "yajna_maharshi",
+                "dharma_ratna"
+            ],
+            "go_type": "social/domain.BadgeTier"
+        },
+        "notification_type": {
+            "values": [
+                "event_nearby",
+                "interest_received",
+                "match_confirmed",
+                "social_like",
+                "event_expiring",
+                "badge_earned",
+                "match_completed",
+                "interest_accepted",
+                "connection_request",
+                "connection_confirmed",
+                "chat_message",
+                "booking_confirmed",
+                "timeline_risk"
+            ],
+            "go_type": "notification/domain.NotificationType"
+        },
+        "conversation_type": {
+            "values": [
+                "pandit_pandit",
+                "pandit_yajman",
+                "help"
+            ],
+            "go_type": "messaging/domain.ConversationType"
+        },
+        "message_content_type": {
+            "values": [
+                "text",
+                "image",
+                "location",
+                "system"
+            ],
+            "go_type": "messaging/domain.MessageContentType"
+        }
+    },
+    "tables": {
+        "users": {
+            "go_struct": "auth/domain.User",
+            "repository": "user/repository.PostgresUserRepository",
+            "description": "Core user identity \u2014 shared by both Yajman and Pandit roles",
+            "columns": {
+                "id": "UUID PK DEFAULT uuid_generate_v4()",
+                "firebase_uid": "TEXT UNIQUE (legacy)",
+                "role": "user_role ENUM",
+                "first_name": "TEXT NOT NULL DEFAULT ''",
+                "last_name": "TEXT NOT NULL DEFAULT ''",
+                "username": "TEXT (partial unique index where NOT NULL)",
+                "email": "TEXT",
+                "phone": "VARCHAR(20) UNIQUE \u2014 E.164 format",
+                "phone_verified": "BOOLEAN NOT NULL DEFAULT FALSE",
+                "profile_photo_url": "TEXT",
+                "profile_complete": "BOOLEAN NOT NULL DEFAULT FALSE",
+                "location": "geography(Point, 4326) \u2014 PostGIS",
+                "auth_provider": "TEXT NOT NULL DEFAULT 'google'",
+                "provider_uid": "TEXT",
+                "google_id": "VARCHAR(255) UNIQUE",
+                "apple_id": "VARCHAR(255) UNIQUE",
+                "city": "VARCHAR(100)",
+                "state": "VARCHAR(100)",
+                "pincode": "VARCHAR(20)",
+                "is_premium": "BOOLEAN NOT NULL DEFAULT FALSE",
+                "premium_until": "BIGINT",
+                "premium_badge": "TEXT NOT NULL DEFAULT ''",
+                "premium_features": "JSONB NOT NULL DEFAULT '{}'::jsonb",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL",
+                "deleted_at": "BIGINT (soft delete)"
+            },
+            "indexes": [
+                "idx_users_firebase_uid",
+                "idx_users_role",
+                "idx_users_location (GIST)",
+                "idx_users_username (partial unique)",
+                "idx_users_phone",
+                "idx_users_auth_provider",
+                "idx_users_google_id (partial)",
+                "idx_users_apple_id (partial)",
+                "idx_users_city_pandit (partial)",
+                "idx_users_is_premium (partial)"
+            ],
+            "constraints": [
+                "uq_users_provider_uid UNIQUE(auth_provider, provider_uid)"
+            ],
+            "triggers": [
+                "trg_users_updated_at \u2192 trigger_set_timestamp()"
+            ]
+        },
+        "refresh_tokens": {
+            "go_struct": "auth/domain.RefreshToken",
+            "repository": "auth/repository.PostgresTokenRepository",
+            "description": "JWT refresh token storage with revocation support",
+            "columns": {
+                "id": "UUID PK",
+                "user_id": "UUID FK \u2192 users(id) ON DELETE CASCADE",
+                "token_hash": "TEXT NOT NULL UNIQUE",
+                "expires_at": "BIGINT NOT NULL",
+                "revoked_at": "BIGINT",
+                "created_at": "BIGINT NOT NULL"
+            },
+            "indexes": [
+                "idx_refresh_tokens_user_id"
+            ]
+        },
+        "pandit_profiles": {
+            "go_struct": "user/domain.PanditProfile",
+            "repository": "user/repository.PostgresPanditProfileRepository",
+            "description": "Professional profile for Pandit users \u2014 1:1 with users via user_id UNIQUE",
+            "columns": {
+                "id": "UUID PK",
+                "user_id": "UUID NOT NULL UNIQUE FK \u2192 users(id) CASCADE",
+                "parampara": "TEXT NOT NULL DEFAULT ''",
+                "veda_affiliation": "TEXT NOT NULL DEFAULT ''",
+                "ceremony_specializations": "TEXT[] NOT NULL DEFAULT '{}'",
+                "languages": "TEXT[] NOT NULL DEFAULT '{}'",
+                "service_radius_km": "INTEGER NOT NULL DEFAULT 25",
+                "availability_status": "availability_status ENUM DEFAULT 'available'",
+                "about": "TEXT",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL",
+                "deleted_at": "BIGINT"
+            },
+            "indexes": [
+                "idx_pandit_profiles_availability_status",
+                "idx_pandit_profiles_ceremony_specializations (GIN)"
+            ],
+            "triggers": [
+                "trg_pandit_profiles_updated_at \u2192 trigger_set_timestamp()",
+                "trg_auto_create_pandit_badge \u2192 create_pandit_badge() \u2014 auto-inserts pandit_badges row on INSERT"
+            ]
+        },
+        "events": {
+            "go_struct": "event/domain.Event",
+            "repository": "event/repository.PostgresEventRepository",
+            "description": "Ceremony events posted by Yajman users",
+            "columns": {
+                "id": "UUID PK",
+                "yajman_id": "UUID FK \u2192 users(id) CASCADE",
+                "ceremony_type": "ceremony_type ENUM NOT NULL",
+                "event_date": "BIGINT NOT NULL",
+                "location": "geography(Point, 4326)",
+                "address": "TEXT NOT NULL DEFAULT ''",
+                "description": "TEXT",
+                "status": "event_status ENUM DEFAULT 'active'",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL",
+                "deleted_at": "BIGINT"
+            },
+            "indexes": [
+                "idx_events_yajman_id",
+                "idx_events_location (GIST)",
+                "idx_events_ceremony_type",
+                "idx_events_status",
+                "idx_events_event_date"
+            ]
+        },
+        "interests": {
+            "go_struct": "interest/domain.Interest",
+            "repository": "interest/repository.PostgresInterestRepository",
+            "description": "Pandit expressions of interest in events",
+            "columns": {
+                "id": "UUID PK",
+                "pandit_id": "UUID FK \u2192 users(id) CASCADE",
+                "event_id": "UUID FK \u2192 events(id) CASCADE",
+                "message": "TEXT",
+                "status": "interest_status ENUM DEFAULT 'pending'",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL"
+            },
+            "constraints": [
+                "uq_interest_pandit_event UNIQUE(pandit_id, event_id)"
+            ],
+            "indexes": [
+                "idx_interests_pandit_id",
+                "idx_interests_event_id",
+                "idx_interests_status"
+            ]
+        },
+        "matches": {
+            "go_struct": "matching/domain.Match",
+            "repository": "matching/repository.PostgresMatchRepository",
+            "description": "Confirmed Yajman\u2013Pandit connections for events (max 3 per event)",
+            "columns": {
+                "id": "UUID PK",
+                "yajman_id": "UUID FK \u2192 users(id) CASCADE",
+                "pandit_id": "UUID FK \u2192 users(id) CASCADE",
+                "event_id": "UUID FK \u2192 events(id) CASCADE",
+                "status": "match_status ENUM DEFAULT 'created'",
+                "matched_at": "BIGINT NOT NULL",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL"
+            },
+            "constraints": [
+                "uq_match_pandit_event UNIQUE(pandit_id, event_id)"
+            ],
+            "indexes": [
+                "idx_matches_yajman_id",
+                "idx_matches_pandit_id",
+                "idx_matches_event_id",
+                "idx_matches_status"
+            ]
+        },
+        "posts": {
+            "go_struct": "social/domain.Post",
+            "repository": "social/repository.PostgresPostRepository",
+            "description": "Social feed posts with feed scoring and tag-based discovery",
+            "columns": {
+                "id": "UUID PK",
+                "author_id": "UUID FK \u2192 users(id) CASCADE",
+                "content": "TEXT NOT NULL DEFAULT ''",
+                "image_urls": "TEXT[] DEFAULT '{}'",
+                "tags": "TEXT[] DEFAULT '{}'",
+                "like_count": "INTEGER DEFAULT 0",
+                "comment_count": "INTEGER DEFAULT 0",
+                "is_pinned": "BOOLEAN DEFAULT FALSE",
+                "post_type": "TEXT DEFAULT 'post'",
+                "visibility": "TEXT DEFAULT 'public'",
+                "feed_score": "FLOAT8 DEFAULT 0",
+                "specialty": "TEXT[] DEFAULT '{}'",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL",
+                "deleted_at": "BIGINT"
+            },
+            "indexes": [
+                "idx_posts_author_id (partial: deleted_at IS NULL)",
+                "idx_posts_created_at (DESC, partial)",
+                "idx_posts_feed_score (DESC composite, partial)",
+                "idx_posts_tags (GIN, partial)"
+            ]
+        },
+        "likes": {
+            "go_struct": "social/domain.Like",
+            "description": "Post like records with unique constraint per user-post pair",
+            "columns": {
+                "id": "UUID PK",
+                "post_id": "UUID FK \u2192 posts(id) CASCADE",
+                "user_id": "UUID FK \u2192 users(id) CASCADE",
+                "created_at": "BIGINT NOT NULL"
+            },
+            "constraints": [
+                "uq_like_post_user UNIQUE(post_id, user_id)"
+            ]
+        },
+        "event_feedback": {
+            "go_struct": "social/domain.EventFeedback",
+            "repository": "social/repository.PostgresTrustRepository",
+            "description": "Post-event Yajman ratings for Pandits (1\u20135 scale)",
+            "columns": {
+                "id": "UUID PK",
+                "match_id": "UUID FK \u2192 matches(id) CASCADE UNIQUE",
+                "yajman_id": "UUID FK \u2192 users(id) CASCADE",
+                "pandit_id": "UUID FK \u2192 users(id) CASCADE",
+                "rating": "INTEGER CHECK(1\u20135)",
+                "comment": "TEXT",
+                "created_at": "BIGINT NOT NULL"
+            }
+        },
+        "pandit_badges": {
+            "go_struct": "social/domain.PanditBadge",
+            "description": "Dharmic badge tier and reputation stats \u2014 auto-created via trigger on pandit_profiles INSERT",
+            "columns": {
+                "id": "UUID PK",
+                "pandit_id": "UUID FK \u2192 users(id) CASCADE UNIQUE",
+                "badge_tier": "badge_tier ENUM DEFAULT 'pandit_ji'",
+                "ceremonies_completed": "INTEGER DEFAULT 0",
+                "average_rating": "DECIMAL(3,2) DEFAULT 0",
+                "total_feedback_count": "INTEGER DEFAULT 0",
+                "updated_at": "BIGINT NOT NULL"
+            }
+        },
+        "notifications": {
+            "go_struct": "notification/domain.Notification",
+            "repository": "notification/repository.PostgresNotificationRepository",
+            "description": "In-app notification inbox with read tracking",
+            "columns": {
+                "id": "UUID PK",
+                "user_id": "UUID FK \u2192 users(id) CASCADE",
+                "type": "notification_type ENUM NOT NULL",
+                "title": "TEXT NOT NULL",
+                "body": "TEXT NOT NULL",
+                "data": "JSONB DEFAULT '{}'",
+                "read": "BOOLEAN DEFAULT FALSE",
+                "delivered_at": "BIGINT",
+                "created_at": "BIGINT NOT NULL"
+            },
+            "indexes": [
+                "idx_notifications_user_id",
+                "idx_notifications_created_at (DESC)",
+                "idx_notifications_read (partial: read = FALSE)"
+            ]
+        },
+        "notification_log": {
+            "description": "Deduplication log for risk-tier event notifications",
+            "columns": {
+                "id": "UUID PK",
+                "event_id": "UUID FK \u2192 events(id) CASCADE",
+                "tier": "TEXT CHECK(low/medium/high)",
+                "sent_at": "BIGINT NOT NULL"
+            },
+            "constraints": [
+                "uq_notification_log_event_tier UNIQUE(event_id, tier)"
+            ]
+        },
+        "fcm_tokens": {
+            "go_struct": "notification/domain.DeviceToken",
+            "description": "Push notification device tokens (FCM/APNs)",
+            "columns": {
+                "id": "UUID PK",
+                "user_id": "UUID FK \u2192 users(id) CASCADE",
+                "token": "TEXT NOT NULL UNIQUE",
+                "device_id": "TEXT DEFAULT ''",
+                "platform": "VARCHAR(10) CHECK(android/ios) DEFAULT 'android'",
+                "is_active": "BOOLEAN DEFAULT TRUE",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL"
+            },
+            "triggers": [
+                "trg_fcm_tokens_updated_at \u2192 trigger_set_timestamp()"
+            ]
+        },
+        "festival_logos": {
+            "description": "Logos and metadata for Hindu festivals and ceremonies",
+            "columns": {
+                "id": "UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+                "festival_slug": "TEXT NOT NULL UNIQUE",
+                "logo_url": "TEXT NOT NULL",
+                "display_order": "INTEGER NOT NULL DEFAULT 0",
+                "category": "TEXT NOT NULL DEFAULT 'general'",
+                "description": "TEXT NOT NULL DEFAULT ''",
+                "created_at": "BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()))::BIGINT",
+                "updated_at": "BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()))::BIGINT"
+            },
+            "indexes": [
+                "idx_festival_logos_slug",
+                "idx_festival_logos_order"
+            ]
+        },
+        "festivals": {
+            "go_struct": "panchanga/domain.Festival",
+            "repository": "panchanga/repository.PostgresPanchangaRepository",
+            "description": "Hindu festival calendar with epoch dates",
+            "columns": {
+                "id": "UUID PK",
+                "festival": "TEXT NOT NULL",
+                "date": "BIGINT NOT NULL",
+                "description": "TEXT NOT NULL DEFAULT ''",
+                "created_at": "BIGINT NOT NULL"
+            },
+            "indexes": [
+                "idx_festivals_date"
+            ]
+        },
+        "panchanga": {
+            "go_struct": "panchanga/domain.Panchanga",
+            "description": "Daily Hindu calendar (Panchanga) data \u2014 samvatsara, tithi, nakshatra, etc.",
+            "columns": {
+                "id": "UUID PK",
+                "date": "BIGINT NOT NULL UNIQUE",
+                "samvatsara": "TEXT",
+                "ayana": "TEXT",
+                "rutu": "TEXT",
+                "masa": "TEXT",
+                "paksha": "TEXT",
+                "tithi": "TEXT",
+                "nakshatra": "TEXT",
+                "yoga": "TEXT",
+                "karana": "TEXT",
+                "vasara": "TEXT",
+                "shraddha_tithi": "TEXT",
+                "masa_niyamaka": "TEXT",
+                "festivals_events": "TEXT",
+                "sunrise": "TEXT",
+                "sunset": "TEXT",
+                "rahukala": "TEXT",
+                "gulikala": "TEXT",
+                "yamaganda": "TEXT",
+                "created_at": "BIGINT NOT NULL"
+            },
+            "indexes": [
+                "idx_panchanga_date"
+            ],
+            "seed_strategy": "ON CONFLICT DO NOTHING \u2014 idempotent inserts via migration files"
+        },
+        "conversations": {
+            "go_struct": "messaging/domain.Conversation",
+            "repository": "messaging/repository.PostgresMessagingRepository",
+            "description": "Chat threads \u2014 supports pandit\u2194pandit, pandit\u2194yajman, and user\u2194help conversations",
+            "columns": {
+                "id": "UUID PK DEFAULT uuid_generate_v4()",
+                "type": "conversation_type ENUM NOT NULL",
+                "event_id": "UUID FK \u2192 events(id) ON DELETE SET NULL",
+                "match_id": "UUID FK \u2192 matches(id) ON DELETE SET NULL",
+                "title": "TEXT NOT NULL DEFAULT ''",
+                "is_active": "BOOLEAN NOT NULL DEFAULT TRUE",
+                "last_message_at": "BIGINT (denormalized for inbox sorting)",
+                "created_at": "BIGINT NOT NULL",
+                "updated_at": "BIGINT NOT NULL"
+            },
+            "indexes": [
+                "idx_conversations_last_msg (DESC)"
+            ],
+            "triggers": [
+                "trg_conversations_updated_at \u2192 trigger_set_timestamp()"
+            ]
+        },
+        "messages": {
+            "go_struct": "messaging/domain.Message",
+            "description": "Individual chat messages within a conversation",
+            "columns": {
+                "id": "UUID PK",
+                "conversation_id": "UUID FK \u2192 conversations(id) CASCADE",
+                "sender_id": "UUID FK \u2192 users(id) CASCADE",
+                "content_type": "message_content_type ENUM DEFAULT 'text'",
+                "content": "TEXT NOT NULL DEFAULT ''",
+                "metadata": "JSONB DEFAULT '{}'",
+                "created_at": "BIGINT NOT NULL"
+            },
+            "indexes": [
+                "idx_messages_conv_created (conversation_id, created_at DESC)",
+                "idx_messages_sender"
+            ]
+        }
+    },
+    "triggers": {
+        "trigger_set_timestamp": {
+            "type": "BEFORE UPDATE",
+            "language": "plpgsql",
+            "description": "Sets updated_at to current Unix epoch on every row update",
+            "used_by": [
+                "users",
+                "pandit_profiles",
+                "events",
+                "interests",
+                "matches",
+                "posts",
+                "pandit_badges",
+                "fcm_tokens",
+                "conversations"
+            ]
+        },
+        "create_pandit_badge": {
+            "type": "AFTER INSERT ON pandit_profiles",
+            "language": "plpgsql",
+            "description": "Auto-creates a pandit_badges row when a pandit_profiles row is inserted"
+        }
+    },
+    "infrastructure": {
+        "connection_pool": "pgxpool.Pool \u2014 concurrency-safe, configured via DATABASE_URL",
+        "transaction_pattern": "database.WithTx() with context-injected transactions (database.InjectTx/ExtractTx)",
+        "dbtx_interface": "database.DBTX \u2014 abstracts pgxpool.Pool and pgx.Tx for repository methods",
+        "migrations_embed": "embed.FS via //go:embed *.sql \u2014 migrations bundled into binary",
+        "remote_data_mode": "Support for local API execution against dev server data via SSH tunnels (5432, 6379, 9000). Enabled via 'make run-remote' or 'scripts/run-remote.sh'."
+    },
+    "known_issues": {
+        "event_status_duplicates": "event_status enum contains both lowercase ('active','cancelled','completed') and capitalized ('Created','Active','Pending','Booked','Completed','Cancelled') values \u2014 normalization planned"
+    }
+}

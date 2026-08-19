@@ -1,0 +1,4222 @@
+{
+  "info": {
+    "name": "Medha API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "Analytics overview",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/analytics/overview",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "analytics",
+                "overview"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Assignment dashboard",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/assignment/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "assignment",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List bookings",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/bookings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "bookings"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"550e8400-e29b-41d4-a716-446655440002\",\n  \"pandit_id\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"status\": \"created\",\n  \"yajman_id\": \"550e8400-e29b-41d4-a716-446655440000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/bookings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "bookings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete booking",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/bookings/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update booking",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/bookings/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List buckets",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/buckets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "buckets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete bucket object",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/buckets/:bucket/objects",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "buckets",
+                ":bucket",
+                "objects"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "bucket",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List bucket objects",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/buckets/:bucket/objects",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "buckets",
+                ":bucket",
+                "objects"
+              ],
+              "variable": [
+                {
+                  "key": "bucket",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload bucket object",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/buckets/:bucket/objects",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "buckets",
+                ":bucket",
+                "objects"
+              ],
+              "query": [
+                {
+                  "key": "preserve_name",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "bucket",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Bucket statistics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/buckets/:bucket/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "buckets",
+                ":bucket",
+                "stats"
+              ],
+              "variable": [
+                {
+                  "key": "bucket",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get bucket object URL",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/buckets/:bucket/url",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "buckets",
+                ":bucket",
+                "url"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "bucket",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List festival logos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/ceremony-logos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "ceremony-logos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create festival logo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"custom\",\n  \"description\": \"Ritual logo entry shown in the ceremony picker.\",\n  \"display_order\": 100,\n  \"image_url\": \"ceremonies/gudli-pooja.png\",\n  \"image_url_no_bg\": \"ceremonies/gudli-pooja-nobg.png\",\n  \"is_active\": true,\n  \"name\": \"Gudli Pooja\",\n  \"slug\": \"gudli-pooja\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/ceremony-logos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "ceremony-logos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Presign logo upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file_name\": \"string\",\n  \"slug\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/ceremony-logos/presign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "ceremony-logos",
+                "presign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete festival logo",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/ceremony-logos/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "ceremony-logos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update festival logo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"custom\",\n  \"description\": \"Updated ceremony picker details.\",\n  \"display_order\": 100,\n  \"image_url\": \"ceremonies/gudli-pooja.png\",\n  \"image_url_no_bg\": \"ceremonies/gudli-pooja-nobg.png\",\n  \"is_active\": true,\n  \"name\": \"Gudli Pooja\",\n  \"slug\": \"gudli-pooja\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/ceremony-logos/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "ceremony-logos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List conversations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/conversations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "conversations"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"550e8400-e29b-41d4-a716-446655440002\",\n  \"match_id\": \"550e8400-e29b-41d4-a716-446655440003\",\n  \"participant_ids\": [\n    \"550e8400-e29b-41d4-a716-446655440000\",\n    \"550e8400-e29b-41d4-a716-446655440001\"\n  ],\n  \"title\": \"Ceremony discussion\",\n  \"type\": \"pandit_yajman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/conversations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "conversations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete conversation",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/conversations/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "conversations",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update conversation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": true,\n  \"title\": \"Updated ceremony discussion\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/conversations/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "conversations",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List events",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/events",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "events"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"12 MG Road, Bengaluru\",\n  \"ceremony_type\": \"custom\",\n  \"custom_ceremony_description\": \"Admin-created custom ceremony details.\",\n  \"custom_ceremony_name\": \"Gudli Pooja\",\n  \"description\": \"Admin logistics note.\",\n  \"event_date\": 1783900800,\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"status\": \"Created\",\n  \"yajman_id\": \"550e8400-e29b-41d4-a716-446655440000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/events",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "events"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List eligible pandits for event",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/events/:eventId/eligible-pandits",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "events",
+                ":eventId",
+                "eligible-pandits"
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete event",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/events/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "events",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update event",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Updated venue address\",\n  \"ceremony_type\": \"custom\",\n  \"custom_ceremony_description\": \"Updated admin ceremony details.\",\n  \"custom_ceremony_name\": \"Gudli Pooja\",\n  \"description\": \"Updated admin logistics note.\",\n  \"event_date\": 1783987200,\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"status\": \"Active\",\n  \"yajman_id\": \"550e8400-e29b-41d4-a716-446655440000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/events/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "events",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List fee configurations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/fees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "fees"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create fee config",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ceremony_type\": \"vivah\",\n  \"fee_amount\": 1,\n  \"fee_type\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/fees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "fees"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update fee config",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ceremony_type\": \"vivah\",\n  \"fee_amount\": 1,\n  \"fee_type\": \"string\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/fees/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "fees",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List festivals",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/festivals",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "festivals"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create festival",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": 1783900800,\n  \"description\": \"Festival description shown in panchanga.\",\n  \"festival\": \"Ugadi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/festivals",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "festivals"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete festival",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/festivals/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "festivals",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update festival",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": 1783987200,\n  \"description\": \"Updated festival description.\",\n  \"festival\": \"Ugadi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/festivals/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "festivals",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List job leads",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/leads",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "leads"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": ""
+                },
+                {
+                  "key": "offset",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                },
+                {
+                  "key": "source",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Manually assign Pandit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"admin_notes\": \"string\",\n  \"event_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"pandit_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"yajman_id\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/leads/assign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "leads",
+                "assign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List leads for event",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/leads/event/:eventId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "leads",
+                "event",
+                ":eventId"
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Finalize lead assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lead_id\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/leads/finalize",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "leads",
+                "finalize"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get job lead",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/leads/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "leads",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update lead status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/leads/:id/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "leads",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"string\",\n  \"username\": \"synthetic-user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Presign media upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket\": \"string\",\n  \"filename\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/media/presign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "media",
+                "presign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Monetization summary",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/monetization/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "monetization",
+                "summary"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Set user premium status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_premium\": true,\n  \"premium_badge\": \"string\",\n  \"premium_features\": {},\n  \"premium_until\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/monetization/users/:id/premium",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "monetization",
+                "users",
+                ":id",
+                "premium"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "System monitoring",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/monitoring",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "monitoring"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List notifications",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/notifications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Your ceremony details were updated.\",\n  \"data\": {\n    \"event_id\": \"550e8400-e29b-41d4-a716-446655440002\"\n  },\n  \"title\": \"New update\",\n  \"type\": \"system\",\n  \"user_id\": \"550e8400-e29b-41d4-a716-446655440000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/notifications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "notifications"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete notification",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/notifications/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "notifications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update notification",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"read\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/notifications/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "notifications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List panchanga",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/panchanga",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "panchanga"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": ""
+                },
+                {
+                  "key": "to",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create panchanga",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ayana\": \"Uttarayana\",\n  \"date\": 1783900800,\n  \"festivals_events\": \"Gudli Pooja\",\n  \"karana\": \"Bava\",\n  \"masa\": \"Jyeshtha\",\n  \"nakshatra\": \"Rohini\",\n  \"paksha\": \"Shukla\",\n  \"rahukala\": \"07:30-09:00\",\n  \"rutu\": \"Grishma\",\n  \"samvatsara\": \"Vishvavasu\",\n  \"sunrise\": \"06:01\",\n  \"sunset\": \"18:45\",\n  \"tithi\": \"Pratipada\",\n  \"vasara\": \"Monday\",\n  \"yoga\": \"Siddhi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/panchanga",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "panchanga"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete panchanga",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/panchanga/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "panchanga",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update panchanga",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"festivals_events\": \"Updated festival/event notes\",\n  \"sunrise\": \"06:02\",\n  \"sunset\": \"18:46\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/panchanga/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "panchanga",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/posts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "posts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"author_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"content\": \"Ceremony preparation tip.\",\n  \"image_urls\": [\n    \"posts/example.jpg\"\n  ],\n  \"tags\": [\n    \"ceremony\",\n    \"tips\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/posts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "posts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete post",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/posts/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "posts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update post",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated ceremony preparation tip.\",\n  \"image_urls\": [\n    \"posts/example.jpg\"\n  ],\n  \"tags\": [\n    \"ceremony\",\n    \"tips\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/posts/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "posts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Server statistics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/server-stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "server-stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get system summary",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "summary"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List users",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"first_name\": \"Synthetic\",\n  \"last_name\": \"User\",\n  \"phone\": \"+919999999999\",\n  \"role\": \"yajman\",\n  \"username\": \"synthetic-user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/users/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update user",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"first_name\": \"Synthetic\",\n  \"last_name\": \"User\",\n  \"role\": \"yajman\",\n  \"username\": \"synthetic-user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/users/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admin-feed",
+      "item": [
+        {
+          "name": "List official Medha App feed posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/feed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "feed"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create a Medha App official feed post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Namaste, I can help with this ceremony.\",\n  \"image_urls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/feed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "feed"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete official Medha App feed post",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/feed/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "feed",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get official Medha App feed post",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/feed/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "feed",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update official Medha App feed post",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Namaste, I can help with this ceremony.\",\n  \"image_urls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/feed/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "feed",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admin-stories",
+      "item": [
+        {
+          "name": "List all official stories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create an official story (draft)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action_label\": \"string\",\n  \"action_url\": \"string\",\n  \"audience_rules\": {},\n  \"audience_scope\": \"string\",\n  \"caption\": \"string\",\n  \"expires_at\": 1,\n  \"media_type\": \"string\",\n  \"media_url\": \"string\",\n  \"priority\": 1,\n  \"starts_at\": 1,\n  \"thumbnail_url\": \"string\",\n  \"title\": \"Conversation title\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete (soft-delete) a story",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get an official story",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update an official story's content/targeting/window",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action_label\": \"string\",\n  \"action_url\": \"string\",\n  \"audience_rules\": {},\n  \"audience_scope\": \"string\",\n  \"caption\": \"string\",\n  \"expires_at\": 1,\n  \"media_type\": \"string\",\n  \"media_url\": \"string\",\n  \"priority\": 1,\n  \"starts_at\": 1,\n  \"thumbnail_url\": \"string\",\n  \"title\": \"Conversation title\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Archive a story",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories/:id/archive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories",
+                ":id",
+                "archive"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pause a story",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories/:id/pause",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories",
+                ":id",
+                "pause"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Publish (activate) a story",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/admin/stories/:id/publish",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "admin",
+                "stories",
+                ":id",
+                "publish"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "auth-v2",
+      "item": [
+        {
+          "name": "Get JWKS",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/.well-known/jwks.json",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ".well-known",
+                "jwks.json"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dev-only login bypass",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+919999999999\",\n  \"role\": \"pandit\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/auth/dev-login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "dev-login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List available dev accounts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/auth/dev-users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "dev-users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout (revoke refresh token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"a1b2c3d4e5f6...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Refresh access token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"a1b2c3d4e5f6...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "refresh"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send OTP to phone number",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+919999999999\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/auth/send-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "send-otp"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verify OTP code",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/auth/verify-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "verify-otp"
+              ],
+              "query": [
+                {
+                  "key": "phone",
+                  "value": ""
+                },
+                {
+                  "key": "otp",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cities",
+      "item": [
+        {
+          "name": "Get nearby seeded cities",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/cities/nearby",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "cities",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": ""
+                },
+                {
+                  "key": "lng",
+                  "value": ""
+                },
+                {
+                  "key": "radius",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search cities by name",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/cities/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "cities",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "event-v2",
+      "item": [
+        {
+          "name": "List or search ceremony types",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/ceremony",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "ceremony"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create an event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"12 MG Road, Bengaluru, Karnataka\",\n  \"ceremony_type\": \"custom\",\n  \"custom_ceremony_description\": \"A family ritual performed before the main ceremony. Include vidhi, samagri, gotra, regional custom, and preferred language notes here.\",\n  \"custom_ceremony_name\": \"Gudli Pooja\",\n  \"description\": \"Please arrive by 7 AM. The family will arrange flowers and fruits.\",\n  \"event_date\": \"2026-06-15\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/event",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List my events",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/event/mine",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event",
+                "mine"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find nearby events",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/event/nearby",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": ""
+                },
+                {
+                  "key": "lng",
+                  "value": ""
+                },
+                {
+                  "key": "radius_km",
+                  "value": ""
+                },
+                {
+                  "key": "min_lat",
+                  "value": ""
+                },
+                {
+                  "key": "max_lat",
+                  "value": ""
+                },
+                {
+                  "key": "min_lng",
+                  "value": ""
+                },
+                {
+                  "key": "max_lng",
+                  "value": ""
+                },
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancel event",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/event/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get event by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/event/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update event",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Updated venue address\",\n  \"ceremony_type\": \"custom\",\n  \"custom_ceremony_description\": \"Updated ritual details, preferred vidhi, samagri list, and regional practice notes.\",\n  \"custom_ceremony_name\": \"Gudli Pooja\",\n  \"description\": \"Updated logistics note for the pandit.\",\n  \"event_date\": \"2026-06-16\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/event/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "feed-v2",
+      "item": [
+        {
+          "name": "List community feed",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create feed post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Namaste, I can help with this ceremony.\",\n  \"image_urls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    \"string\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List posts by user",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed/user/:authorId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed",
+                "user",
+                ":authorId"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "authorId",
+                  "value": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete feed post",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get feed post",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Unlike a post",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed/:id/like",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed",
+                ":id",
+                "like"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Like a post",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/feed/:id/like",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "feed",
+                ":id",
+                "like"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "interest-v2",
+      "item": [
+        {
+          "name": "List interests for an event",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/event/:id/interest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "event",
+                ":id",
+                "interest"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Express interest in an event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"message\": \"I am available for this ceremony.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/interest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "interest"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List my interests",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/interest/mine",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "interest",
+                "mine"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Accept interest",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/interest/:id/accept",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "interest",
+                ":id",
+                "accept"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Confirm booking",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/interest/:id/book",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "interest",
+                ":id",
+                "book"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Respond to interest",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accept\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/interest/:id/respond",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "interest",
+                ":id",
+                "respond"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Withdraw interest",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/interest/:id/withdraw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "interest",
+                ":id",
+                "withdraw"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "lead",
+      "item": [
+        {
+          "name": "List my leads",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/leads/mine",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "leads",
+                "mine"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Accept a job lead",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/leads/:id/accept",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "leads",
+                ":id",
+                "accept"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Decline a job lead",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/leads/:id/decline",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "leads",
+                ":id",
+                "decline"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "location-v2",
+      "item": [
+        {
+          "name": "Search for nearby POIs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/location/nearby",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "location",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": ""
+                },
+                {
+                  "key": "lng",
+                  "value": ""
+                },
+                {
+                  "key": "keywords",
+                  "value": "temple,venue"
+                },
+                {
+                  "key": "radius",
+                  "value": "5000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reverse Geocode",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/location/reverse",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "location",
+                "reverse"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": ""
+                },
+                {
+                  "key": "lng",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get driving route waypoints",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/location/route",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "location",
+                "route"
+              ],
+              "query": [
+                {
+                  "key": "waypoints",
+                  "value": ""
+                },
+                {
+                  "key": "alternatives",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Location auto-suggest",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/location/suggest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "location",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "region",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get MapMyIndia access token",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/location/token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "location",
+                "token"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "match-v2",
+      "item": [
+        {
+          "name": "List my matches",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/match/mine",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "match",
+                "mine"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get match details",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/match/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "match",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Accept match",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/match/:id/accept",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "match",
+                ":id",
+                "accept"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Activate match",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/match/:id/activate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "match",
+                ":id",
+                "activate"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Complete match",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/match/:id/complete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "match",
+                ":id",
+                "complete"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "messaging",
+      "item": [
+        {
+          "name": "List my conversations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/conversation",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "conversation"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create a conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"match_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"participant_ids\": [\n    \"string\"\n  ],\n  \"title\": \"Conversation title\",\n  \"type\": \"pandit_yajman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/conversation",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "conversation"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get conversation details",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/conversation/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "conversation",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List messages in a conversation",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/conversation/:id/message",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "conversation",
+                ":id",
+                "message"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send a message (REST fallback)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Namaste, I can help with this ceremony.\",\n  \"content_type\": \"text\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/conversation/:id/message",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "conversation",
+                ":id",
+                "message"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark conversation as read",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/conversation/:id/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "conversation",
+                ":id",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Start a help conversation",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/help",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "help"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "notification-v2",
+      "item": [
+        {
+          "name": "List my notifications",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/notification",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "notification"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Unregister device push token",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"replace-with-token\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/notification/device-token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "notification",
+                "device-token"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register device push token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"device_id\": \"android-device-001\",\n  \"platform\": \"android\",\n  \"token\": \"replace-with-token\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/notification/device-token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "notification",
+                "device-token"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark all notifications as read",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/notification/read-all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "notification",
+                "read-all"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark notification as read",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/api/v2/notification/:id/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "notification",
+                ":id",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "panchanga-v2",
+      "item": [
+        {
+          "name": "Panchanga by Date",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/panchanga",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "panchanga"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upcoming Festivals",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/panchanga/festivals",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "panchanga",
+                "festivals"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Panchanga Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/panchanga/range",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "panchanga",
+                "range"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": ""
+                },
+                {
+                  "key": "to",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Today's Panchanga",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/panchanga/today",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "panchanga",
+                "today"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "pandit-v2",
+      "item": [
+        {
+          "name": "Find nearby pandits",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/nearby",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": ""
+                },
+                {
+                  "key": "lng",
+                  "value": ""
+                },
+                {
+                  "key": "radius_km",
+                  "value": ""
+                },
+                {
+                  "key": "available_only",
+                  "value": ""
+                },
+                {
+                  "key": "parampara",
+                  "value": ""
+                },
+                {
+                  "key": "ceremony_type",
+                  "value": ""
+                },
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get pandit profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Setup or update pandit profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"about\": \"Experienced pandit with 15+ years.\",\n  \"availability_status\": \"available\",\n  \"ceremony_specializations\": [\n    \"[\\\"vivah\\\"\",\n    \"\\\"grihapravesh\\\"]\"\n  ],\n  \"languages\": [\n    \"[\\\"Hindi\\\"\",\n    \"\\\"Sanskrit\\\"]\"\n  ],\n  \"parampara\": \"Smartha\",\n  \"service_radius_km\": 30,\n  \"veda_affiliation\": \"Rigveda\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get pandit service cities",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/service-cities",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                "service-cities"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Set pandit service cities",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"additionalCityIds\": [\n    \"string\"\n  ],\n  \"homeCityId\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/service-cities",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                "service-cities"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get pandit by user ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "storage-v2",
+      "item": [
+        {
+          "name": "Confirm media upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object_key\": \"string\",\n  \"upload_type\": \"profile_photo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/storage/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "storage",
+                "confirm"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get pre-signed upload URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content_type\": \"text\",\n  \"file_name\": \"string\",\n  \"upload_type\": \"profile_photo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/storage/presign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "storage",
+                "presign"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "stories",
+      "item": [
+        {
+          "name": "List active official stories for the viewer",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/stories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stories"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": ""
+                },
+                {
+                  "key": "limit",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record a story view",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v2/stories/:id/view",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "stories",
+                ":id",
+                "view"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "trust-v2",
+      "item": [
+        {
+          "name": "Submit feedback for a match",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"string\",\n  \"rating\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/match/:id/feedback",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "match",
+                ":id",
+                "feedback"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get pandit badge and reputation",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/pandit/:id/badge",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pandit",
+                ":id",
+                "badge"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "user-v2",
+      "item": [
+        {
+          "name": "Get public profile details",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/public/profile/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "public",
+                "profile",
+                ":username"
+              ],
+              "variable": [
+                {
+                  "key": "username",
+                  "value": "synthetic-user"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check username availability",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/user/check-username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "user",
+                "check-username"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete user account",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v2/user/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "user",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get user location",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/user/me/location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "user",
+                "me",
+                "location"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update user location",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/user/me/location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "user",
+                "me",
+                "location"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get user profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v2/user/me/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "user",
+                "me",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Setup user profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"synthetic@example.com\",\n  \"first_name\": \"Synthetic\",\n  \"last_name\": \"User\",\n  \"role\": \"yajman\",\n  \"username\": \"syntheticuser\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v2/user/me/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "user",
+                "me",
+                "profile"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearer_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}

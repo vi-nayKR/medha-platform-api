@@ -1,0 +1,24 @@
+# ============================================================
+#  CD — Production Environment
+#  Triggers on push to prod branch.
+#  Calls the reusable CD workflow.
+# ============================================================
+name: CD - Prod
+run-name: "CD - Prod"
+
+on:
+  push:
+    branches: [prod]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/cd.yml
+    with:
+      environment: prod
+      git_sha: ${{ github.sha }}
+    secrets: inherit

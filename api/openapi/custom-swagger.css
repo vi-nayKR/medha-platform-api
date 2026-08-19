@@ -1,0 +1,407 @@
+/* Postman Theme for Swagger UI — iOS 26 Glossy Glassmorphism Edition */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --postman-bg: #0d0d0d;
+  --postman-sidebar-bg: rgba(10, 10, 10, 0.6);        /* Glass panel inside */
+  --postman-container-bg: rgba(25, 25, 25, 0.55);      /* Main frosted glass surface */
+  --postman-input-bg: rgba(255, 255, 255, 0.05);       /* Frosted input */
+  --postman-input-border: rgba(255, 255, 255, 0.08);   /* Elegant translucent border */
+  --postman-fg: #e5e5e5;
+  --postman-fg-muted: #a5a5a5;
+  --postman-text-bright: #ffffff;
+  
+  /* Postman Orange Accent (Neon Glossy Glass Edition) */
+  --postman-orange: #ff7d4a;
+  --postman-orange-hover: #ff5f22;
+  --postman-border: rgba(255, 255, 255, 0.1);          /* Elegant translucent card border */
+  
+  /* HTTP Methods Highly Legible Neon Gloss Palette */
+  --http-get-bg: rgba(0, 230, 118, 0.03);
+  --http-get-border: rgba(0, 230, 118, 0.35);
+  --http-get-glow: #00e676;
+  
+  --http-post-bg: rgba(255, 108, 55, 0.03);
+  --http-post-border: rgba(255, 108, 55, 0.35);
+  --http-post-glow: #ff6c37;
+  
+  --http-put-bg: rgba(41, 121, 255, 0.03);
+  --http-put-border: rgba(41, 121, 255, 0.35);
+  --http-put-glow: #2979ff;
+  
+  --http-delete-bg: rgba(255, 23, 68, 0.03);
+  --http-delete-border: rgba(255, 23, 68, 0.35);
+  --http-delete-glow: #ff1744;
+  
+  --http-patch-bg: rgba(213, 0, 249, 0.03);
+  --http-patch-border: rgba(213, 0, 249, 0.35);
+  --http-patch-glow: #d500f9;
+}
+
+body {
+  /* Ambient Mesh Gradient Background to give depth through the glass panels */
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 108, 55, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(0, 230, 118, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(41, 121, 255, 0.03) 0%, transparent 50%),
+    #0d0d0d !important;
+  color: var(--postman-fg) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* 
+   BASE ELEMENT COLOR RESET (Legibility inside glass panels)
+*/
+.swagger-ui {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  color: var(--postman-fg) !important;
+}
+
+.swagger-ui * {
+  border-color: var(--postman-border) !important;
+}
+
+/* Titles and Headers */
+.swagger-ui .info .title,
+.swagger-ui .info h1,
+.swagger-ui .info h2,
+.swagger-ui .info h3,
+.swagger-ui .info h4,
+.swagger-ui .info h5,
+.swagger-ui .opblock-tag,
+.swagger-ui .opblock-tag a,
+.swagger-ui .tabli a {
+  color: var(--postman-text-bright) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.swagger-ui .info .title {
+  font-size: 34px !important;
+}
+
+.swagger-ui .opblock-tag {
+  font-size: 22px !important;
+  border-bottom: 1.5px solid var(--postman-border) !important;
+  padding: 12px 0 !important;
+}
+
+/* Sub-titles / API Version Glossy Pre-tag */
+.swagger-ui .info .title small pre {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  color: var(--postman-orange) !important;
+  border: 1px solid rgba(255, 125, 74, 0.4) !important;
+  border-radius: 8px;
+  font-weight: 700 !important;
+  padding: 6px 12px !important;
+  display: inline-block !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+}
+
+/* Descriptions & General Text */
+.swagger-ui .info p,
+.swagger-ui .info .markdown,
+.swagger-ui .description,
+.swagger-ui .opblock-description-wrapper p,
+.swagger-ui .responses-table p {
+  color: var(--postman-fg) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+}
+
+/* 
+   DATA TYPE OVERRIDES (Bright Neon Orange)
+*/
+.swagger-ui .parameter__type,
+.swagger-ui .prop-type,
+.swagger-ui .model-hint,
+.swagger-ui .prop-format,
+.swagger-ui .model .prop-type,
+.swagger-ui .model .model-hint {
+  color: var(--postman-orange) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 600 !important;
+  font-size: 13.5px !important;
+}
+
+/* Parameter names & Properties */
+.swagger-ui .parameter__name,
+.swagger-ui .property__name,
+.swagger-ui .parameters-col_name {
+  color: var(--postman-text-bright) !important;
+  font-weight: 700 !important;
+  font-size: 14.5px !important;
+}
+
+.swagger-ui .parameter__name.required span {
+  color: #ff4d4d !important; /* Vivid Red */
+}
+
+/* 
+   SYNTAX HIGHLIGHTING (Luminous Neon Glass Editor)
+*/
+.swagger-ui pre,
+.swagger-ui code {
+  font-family: 'JetBrains Mono', monospace !important;
+  background-color: var(--postman-sidebar-bg) !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+}
+
+.swagger-ui .model-box {
+  background-color: rgba(5, 5, 5, 0.4) !important;
+  padding: 16px !important;
+  border: 1px solid var(--postman-border) !important;
+  border-radius: 10px !important;
+}
+
+/* JSON keys (Luminous Cyan) */
+.swagger-ui .microlight .hljs-attr,
+.swagger-ui .highlight-code .hljs-attr,
+.swagger-ui .microlight .key,
+.swagger-ui .highlight-code .key {
+  color: #00e5ff !important;
+  font-weight: 600 !important;
+}
+
+/* JSON values (Strings - Luminous Green) */
+.swagger-ui .microlight .hljs-string,
+.swagger-ui .microlight .s,
+.swagger-ui .highlight-code .s,
+.swagger-ui .highlight-code .string,
+.swagger-ui .highlight-code .hljs-string {
+  color: #69f0ae !important;
+}
+
+/* JSON values (Numbers & Booleans) */
+.swagger-ui .microlight .hljs-number,
+.swagger-ui .highlight-code .hljs-number {
+  color: #ffd740 !important;
+}
+
+.swagger-ui .microlight .hljs-literal,
+.swagger-ui .microlight .hljs-keyword,
+.swagger-ui .highlight-code .hljs-literal,
+.swagger-ui .highlight-code .hljs-keyword {
+  color: #b388ff !important;
+}
+
+/* 
+   HTTP Tag Contrast & Shape 
+*/
+.swagger-ui .opblock-summary-method {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border-radius: 8px !important;
+  letter-spacing: 0.08em !important;
+  padding: 8px 16px !important;
+  min-width: 85px !important;
+  text-align: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+}
+
+/* 
+   GLASS CONTAINER SYSTEM (Frosted Glassmorphism)
+*/
+.swagger-ui .scheme-container, 
+.swagger-ui .opblock-section-header, 
+.swagger-ui .auth-container,
+.swagger-ui .dialog-ux .modal-ux {
+  background: var(--postman-container-bg) !important;
+  backdrop-filter: blur(25px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important; /* Elegant specular glass border */
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.swagger-ui .opblock {
+  background: rgba(20, 20, 20, 0.45) !important;
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  border-radius: 12px !important;
+  margin-bottom: 16px !important;
+  border: 1px solid var(--postman-border) !important;
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.15) !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease !important;
+}
+
+.swagger-ui .opblock:hover {
+  transform: translateY(-2px) !important; /* Gentle hover lift */
+  box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Method Blocks styling (Frosted Tint Borders) */
+.swagger-ui .opblock.opblock-get { border-color: var(--http-get-border) !important; }
+.swagger-ui .opblock.opblock-get .opblock-summary-method { background: var(--http-get-glow) !important; }
+.swagger-ui .opblock.opblock-get .opblock-summary { border-color: var(--http-get-border) !important; }
+
+.swagger-ui .opblock.opblock-post { border-color: var(--http-post-border) !important; }
+.swagger-ui .opblock.opblock-post .opblock-summary-method { background: var(--http-post-glow) !important; color: #ffffff !important; }
+.swagger-ui .opblock.opblock-post .opblock-summary { border-color: var(--http-post-border) !important; }
+
+.swagger-ui .opblock.opblock-put { border-color: var(--http-put-border) !important; }
+.swagger-ui .opblock.opblock-put .opblock-summary-method { background: var(--http-put-glow) !important; color: #ffffff !important; }
+.swagger-ui .opblock.opblock-put .opblock-summary { border-color: var(--http-put-border) !important; }
+
+.swagger-ui .opblock.opblock-delete { border-color: var(--http-delete-border) !important; }
+.swagger-ui .opblock.opblock-delete .opblock-summary-method { background: var(--http-delete-glow) !important; }
+.swagger-ui .opblock.opblock-delete .opblock-summary { border-color: var(--http-delete-border) !important; }
+
+.swagger-ui .opblock.opblock-patch { border-color: var(--http-patch-border) !important; }
+.swagger-ui .opblock.opblock-patch .opblock-summary-method { background: var(--http-patch-glow) !important; }
+.swagger-ui .opblock.opblock-patch .opblock-summary { border-color: var(--http-patch-border) !important; }
+
+/* Form Elements (Frosted Input Fields) */
+.swagger-ui input, 
+.swagger-ui textarea, 
+.swagger-ui select {
+  background: var(--postman-input-bg) !important;
+  color: var(--postman-text-bright) !important;
+  border: 1px solid var(--postman-input-border) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  font-size: 13.5px !important;
+  font-family: 'Inter', sans-serif !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  transition: all 0.25s ease !important;
+}
+
+.swagger-ui input:focus, 
+.swagger-ui textarea:focus, 
+.swagger-ui select:focus {
+  outline: none !important;
+  border-color: var(--postman-orange) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(255, 125, 74, 0.25) !important; /* Frosted glow halo */
+}
+
+.swagger-ui select option {
+  background-color: #1a1a1a !important;
+  color: var(--postman-text-bright) !important;
+}
+
+/* Interactive Authorization Buttons (Glossy Glass Style) */
+.swagger-ui .btn.authorize {
+  color: var(--postman-orange) !important;
+  border: 1px solid rgba(255, 125, 74, 0.5) !important;
+  background: rgba(255, 125, 74, 0.06) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 9px 18px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+.swagger-ui .btn.authorize:hover {
+  background-color: rgba(255, 125, 74, 0.16) !important;
+  border-color: var(--postman-orange) !important;
+  box-shadow: 0 4px 15px rgba(255, 125, 74, 0.2) !important;
+}
+.swagger-ui .btn.authorize svg { 
+  fill: var(--postman-orange) !important; 
+}
+
+/* Execute / Primary Action Button (Glossy Liquid Reflection Gradient) */
+.swagger-ui .btn.execute {
+  background: linear-gradient(135deg, rgba(255, 125, 74, 0.95), rgba(255, 95, 34, 0.98)) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important; /* Specular highlight rim */
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 10px 28px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 4px 16px rgba(255, 125, 74, 0.35) !important;
+}
+.swagger-ui .btn.execute:hover {
+  background: linear-gradient(135deg, rgba(255, 125, 74, 1), rgba(255, 80, 20, 1)) !important;
+  box-shadow: 0 6px 20px rgba(255, 125, 74, 0.45) !important;
+}
+
+/* Try it out / Cancel / Clear Buttons */
+.swagger-ui .btn.try-out_new {
+  border: 1px solid rgba(255, 125, 74, 0.5) !important;
+  color: var(--postman-orange) !important;
+  background-color: rgba(255, 125, 74, 0.05) !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+.swagger-ui .btn.try-out_new:hover {
+  background-color: rgba(255, 125, 74, 0.15) !important;
+}
+
+.swagger-ui .btn.cancel {
+  border: 1px solid rgba(255, 23, 68, 0.5) !important;
+  color: var(--http-delete-glow) !important;
+  background-color: rgba(255, 23, 68, 0.05) !important;
+}
+.swagger-ui .btn.cancel:hover {
+  background-color: rgba(255, 23, 68, 0.15) !important;
+}
+
+/* Tables and Headers */
+.swagger-ui table thead tr td,
+.swagger-ui table thead tr th {
+  border-bottom: 2px solid var(--postman-border) !important;
+  color: var(--postman-text-bright) !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  padding: 12px 10px !important;
+}
+
+.swagger-ui table tbody tr td {
+  padding: 12px 10px !important;
+}
+
+.swagger-ui .parameters-col_description .markdown p {
+  color: var(--postman-fg) !important;
+}
+
+/* Link override */
+.swagger-ui a {
+  color: var(--postman-orange) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+.swagger-ui a:hover {
+  text-decoration: underline !important;
+}
+
+/* Responses Block (Frosted sub-panel) */
+.swagger-ui .responses-inner {
+  background: var(--postman-sidebar-bg) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  padding: 20px !important;
+  border-radius: 10px !important;
+  border: 1px solid var(--postman-border) !important;
+}
+
+.swagger-ui .response-col_status {
+  font-weight: 700 !important;
+  color: var(--postman-text-bright) !important;
+  font-size: 14.5px !important;
+}
+
+/* Models and Schema Viewer details */
+.swagger-ui .model-title {
+  color: var(--postman-text-bright) !important;
+  font-weight: 700 !important;
+}
+
+.swagger-ui .model-toggle {
+  background-size: 16px !important;
+  opacity: 0.95 !important;
+}
+
+/* Hide topbar */
+.swagger-ui .topbar {
+  display: none !important;
+}

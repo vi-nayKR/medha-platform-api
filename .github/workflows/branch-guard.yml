@@ -1,0 +1,53 @@
+# ============================================================
+#  Branch Guard — Warn on direct pushes to protected branches
+#
+#  This does NOT block pushes; it only logs a warning.
+#  Actual branch protection should be configured in GitHub
+#  repo settings (Settings → Branches → Branch protection rules).
+#
+#  Filters out:
+#  - PR merge commits (prefix: "Merge pull request")
+#  - Release bot merges (prefix: "release: merge")
+# ============================================================
+name: branch-guard
+
+on:
+  push:
+    branches: [main, prod]
+
+# No permissions needed — this is purely informational
+permissions: {}
+
+jobs:
+  warn-direct-push:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.head_commit.message &&
+      !startsWith(github.event.head_commit.message, 'Merge pull request') &&
+      !startsWith(github.event.head_commit.message, 'release: merge') &&
+      !contains(github.actor, 'dependabot')
+    steps:
+      - name: Warn about direct push
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+          PUSH_ACTOR: ${{ github.actor }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_ID: ${{ github.event.head_commit.id }}
+        run: |
+          echo "::warning::Direct push to '${BRANCH_NAME}' detected"
+          echo "::warning::Pushed by: ${PUSH_ACTOR}"
+          echo "::warning::Commit: ${COMMIT_MESSAGE}"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "⚠️  TEAM CONVENTION VIOLATION"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Branch:  ${BRANCH_NAME}"
+          echo "Author:  ${PUSH_ACTOR}"
+          echo "Commit:  ${COMMIT_ID}"
+          echo "Message: ${COMMIT_MESSAGE}"
+          echo ""
+          echo "Please use pull requests for changes to main and prod."
+          echo "Workflow: feature/* → dev → main → prod (via tags)"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

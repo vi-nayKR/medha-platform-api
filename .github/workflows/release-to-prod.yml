@@ -1,0 +1,58 @@
+# ============================================================
+#  Release to Production
+#
+#  Triggered by semver tags: vX.Y.0
+#  - Merges the tagged commit into the `prod` branch
+#  - Creates a GitHub Release with auto-generated notes
+#
+#  Tag pattern: triggers on any vX.Y.0 tag (patch must be 0).
+#  Examples that WILL trigger:  v0.1.0, v0.2.0, v1.0.0, v2.0.0
+#  Examples that WON'T trigger: v1.0.1, v1.1.1 (patch releases)
+#
+#  After merging to prod, the push triggers CI → CD-Prod pipeline.
+# ============================================================
+name: release-to-prod
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  merge-to-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate Release Tag
+        id: check
+        run: |
+          if [[ ! "${{ github.ref_name }}" =~ ^v[0-9]+\.[0-9]+\.0$ ]]; then
+            echo "::warning::Tag '${{ github.ref_name }}' is not a minor/major release (patch != 0). Skipping."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Merge tag into prod
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout prod
+          git merge ${{ github.ref_name }} --no-ff -m "release: merge ${{ github.ref_name }} into prod"
+          git push origin prod
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.skip != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          generate_release_notes: true
