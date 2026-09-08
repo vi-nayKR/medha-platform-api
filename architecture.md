@@ -128,7 +128,7 @@ without a mocking framework.
 ## 8. Data model & storage
 
 - **PostgreSQL + PostGIS** is the system of record. Schema evolves via **goose** migrations in
-  `migrations/` (~49). Soft-deletable tables carry `deleted_at`; queries filter `deleted_at IS NULL`.
+  `migrations/` (50 migrations). Soft-deletable tables carry `deleted_at`; queries filter `deleted_at IS NULL`.
 - **Redis** backs sessions, rate limiting, and WebSocket pub/sub.
 - **SeaweedFS** (S3-compatible) stores user/media objects, fronted by `internal/storage`.
 
