@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"strings"
 	"testing"
 
 	"github.com/google/uuid"
@@ -156,7 +157,8 @@ func (m *mockInterestRepo) CountActiveByEventID(_ context.Context, eventID uuid.
 }
 
 type mockEventRepo struct {
-	events map[uuid.UUID]*eventdomain.Event
+	events           map[uuid.UUID]*eventdomain.Event
+	failUpdateStatus bool
 }
 
 func (m *mockEventRepo) Create(_ context.Context, event *eventdomain.Event) error {
@@ -177,6 +179,9 @@ func (m *mockEventRepo) Update(_ context.Context, _ *eventdomain.Event) error {
 }
 
 func (m *mockEventRepo) UpdateStatus(_ context.Context, id uuid.UUID, status eventdomain.EventStatus) error {
+	if m.failUpdateStatus {
+		return errors.New("simulated database failure during event status update")
+	}
 	if event, ok := m.events[id]; ok {
 		event.Status = status
 	}
@@ -513,5 +518,47 @@ func TestInterestService_ConfirmBooking_BulkRejectsOtherInterests(t *testing.T) 
 	}
 	if other.Status != interestdomain.InterestStatusRejected {
 		t.Errorf("expected other interest status rejected, got %v", other.Status)
+	}
+}
+
+func TestInterestService_ConfirmBooking_AtomicRollbackOnEventUpdateFailure(t *testing.T) {
+	interestRepo := &mockInterestRepo{interests: make(map[uuid.UUID]*interestdomain.Interest)}
+	eventRepo := &mockEventRepo{events: make(map[uuid.UUID]*eventdomain.Event)}
+	userRepo := &mockUserRepo{users: make(map[uuid.UUID]*userdomain.User)}
+	matchRepo := &mockMatchRepo{matches: make(map[uuid.UUID]*matchdomain.Match)}
+
+	matchSvc := matchservice.NewMatchService(nil, matchRepo, eventRepo, nil, slog.Default())
+	svc := interestsvc.NewInterestService(nil, interestRepo, eventRepo, matchSvc, userRepo, slog.Default())
+
+	yajmanID := uuid.New()
+	panditID := uuid.New()
+	eventID := uuid.New()
+
+	eventRepo.events[eventID] = &eventdomain.Event{
+		ID:           eventID,
+		YajmanID:     yajmanID,
+		CeremonyType: eventdomain.CeremonySatyanarayan,
+		Status:       eventdomain.EventStatusActive,
+	}
+
+	interest := &interestdomain.Interest{
+		ID:       uuid.New(),
+		PanditID: panditID,
+		EventID:  eventID,
+		Status:   interestdomain.InterestStatusConnected,
+	}
+	interestRepo.interests[interest.ID] = interest
+
+	// Simulate database transaction failure during event status update
+	eventRepo.failUpdateStatus = true
+
+	txCtx := database.InjectTx(context.Background(), &fakeTx{})
+	_, err := svc.ConfirmBooking(txCtx, interest.ID, yajmanID)
+	if err == nil {
+		t.Fatal("expected ConfirmBooking to fail when event update fails, got nil")
+	}
+
+	if !strings.Contains(err.Error(), "simulated database failure") {
+		t.Fatalf("expected simulated db failure error, got: %v", err)
 	}
 }

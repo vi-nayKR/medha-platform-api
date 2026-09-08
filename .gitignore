@@ -2,7 +2,9 @@
 bin/
 dist/
 tmp/
-medha-api
+/medha-api
+bin/medha-api
+cmd/medha-api/medha-api
 *.exe
 *.exe~
 *.dll

@@ -38,6 +38,9 @@ func GetExecutor(ctx context.Context, pool *pgxpool.Pool) DBTX {
 	if tx := ExtractTx(ctx); tx != nil {
 		return tx
 	}
+	if pool == nil {
+		return nil
+	}
 	return pool
 }
 

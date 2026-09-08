@@ -1,20 +1,23 @@
-# Building a 21-Service Go Monolith That Handles 500 RPS on a Single Node
+# Architecting a 21-Service Go Monolith: Bounded Contexts, PostGIS & Redis WebSockets
 
-*By Vinay K R — Lead Architect & Systems Engineer*
+*By Vinay K R — Co-Architect & Core Backend Engineer*
+
+> [!NOTE]
+> **Architecture & Snapshot Disclosure**: This article analyzes the architectural patterns, database transaction propagation, and spatial/messaging subsystems engineered for the Medha Platform API Go backend. Preliminary performance targets represent early simulation benchmarks rather than published production audits. For reproducible test suites and snapshot provenance, refer to the repository [README.md](../../README.md).
 
 ---
 
 ## The Monolith vs. Microservice Dilemma
 
-When designing high-throughput backends for early-stage and growth platforms, the default industry temptation is often to prematurely decompose systems into dozens of independently deployed microservices. While microservices offer organizational scaling for large engineering divisions, they introduce immense operational complexity:
-- Network serialization overhead (JSON/gRPC hops)
-- Distributed transaction coordination (Two-Phase Commit or Saga patterns)
-- Complex failure modes (partial outages, cascading timeouts)
-- Expensive infrastructure footprints (multiple running VMs and container clusters)
+When designing backends for product platforms, a common industry pitfall is prematurely decomposing systems into dozens of independently deployed microservices. While microservices offer organizational scaling for large engineering divisions, they introduce immense operational overhead:
+- Network serialization latency and RPC overhead
+- Distributed transaction coordination (Two-Phase Commit or Saga complexity)
+- Complex cascading failure modes and partial availability issues
+- High infrastructure footprint and maintenance burden
 
-For the **Medha Platform**, we chose a different path: **A Domain-Driven Modular Monolith in Go.**
+For the **Medha Platform**, we chose a pragmatic approach: **A Domain-Driven Modular Monolith in Go.**
 
-In this article, I walk through how we architected a single compiled Go binary containing **21 strictly isolated bounded contexts**, 50 database migrations, PostGIS spatial lookups, and WebSocket pub/sub fan-out — capable of sustaining **500 RPS at p95 latency <85ms** on modest commodity hardware.
+In this article, I walk through how we architected a single compiled Go binary containing **21 strictly isolated bounded contexts**, 50 automated database migrations, PostGIS spatial indexing, and WebSocket pub/sub fan-out — engineered for high reliability, atomic transactional guarantees, and operational simplicity.
 
 ---
 
@@ -105,16 +108,17 @@ Our WebSocket hub separates connection management from message dissemination:
 
 ---
 
-## 4. Benchmark Results: 500 RPS Under Distributed Load
+## 4. Verification, Testing & System Ceilings
 
-We benchmarked the compiled binary against a PostgreSQL 17 + PostGIS instance running under container constraints (2 CPU cores, 2GB RAM):
+To ensure reliability without relying on heavyweight external infrastructure in local development or CI pipelines, the platform leverages:
 
-- **Read Proximity Searches:** 780 requests/second at p95 latency of 42.1ms.
-- **Transactional State Transitions:** 500 requests/second with 100% success rate (0 errors across 50,000 iterations).
-- **Memory Footprint:** The idle Go monolith consumes just **42MB RAM**; under sustained 500 RPS load, RSS stabilized at **185MB RAM**.
+- **Strict Test Double Fakes:** Hand-written repository test doubles in `service_test` packages verify domain business logic, multi-status state machines, and transactional rollbacks deterministically without mocking libraries.
+- **Race Detection in CI:** Every bounded context executes under `go test -race ./...` in automated workflows, guarding against concurrent map access in WebSocket hubs and worker pools.
+- **Fail-Fast vs. Graceful Degradation:** The application supports dual startup modes — running in degraded local development mode when secondary datastores (S3, Redis) are offline, while failing fast on schema mismatches or missing credentials in production.
+- **Known Ceilings:** As a modular monolith, PostgreSQL acts as the single primary system of record. High-volume contexts such as chat messaging or real-time geolocation updates represent the primary scaling ceiling, designed to be extracted into dedicated read replicas or microservices only when query volume profile justifies the operational trade-off.
 
 ---
 
 ## Conclusion
 
-A well-architected Domain-Driven Monolith provides the perfect balance of developer velocity, atomic transactional guarantees, and massive throughput efficiency. By investing in clean 4-layer boundaries and robust database indexing, a single Go binary can easily handle enterprise-scale traffic at a fraction of the cost and complexity of a microservice fleet.
+A well-architected Domain-Driven Monolith provides an optimal balance of developer velocity, atomic transactional guarantees, and operational simplicity. By investing in clean 4-layer boundaries, transaction-aware query execution, and robust database indexing, a single Go binary delivers resilient backend services without the unnecessary operational friction of a microservice fleet.

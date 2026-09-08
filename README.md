@@ -1,19 +1,19 @@
 <div align="center">
 
 # 🏛️ Medha Platform API
-### High-Throughput Domain-Driven Go Backend · PostGIS Proximity Engine · Distributed WebSocket Pub/Sub
+### Domain-Driven Modular Go Backend · PostGIS Proximity Engine · Distributed WebSocket Pub/Sub
 
-[![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev/)
+[![CI](https://github.com/vi-nayKR/medha-platform-api/actions/workflows/ci.yml/badge.svg)](https://github.com/vi-nayKR/medha-platform-api/actions/workflows/ci.yml)
+[![Go Version](https://img.shields.io/badge/Go-1.25%2B-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17%20%2B%20PostGIS-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Redis](https://img.shields.io/badge/Redis-8.10%20Pub%2FSub-DC382D?style=flat-square&logo=redis&logoColor=white)](https://redis.io/)
 [![Storage](https://img.shields.io/badge/Object%20Store-SeaweedFS%20S3-4A90E2?style=flat-square)](https://github.com/seaweedfs/seaweedfs)
-[![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes%20(k3s)-326CE5?style=flat-square&logo=kubernetes&logoColor=white)](https://k3s.io/)
-[![GitOps](https://img.shields.io/badge/GitOps-Argo%20CD-EF6134?style=flat-square&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)
+[![Container Runtime](https://img.shields.io/badge/Runtime-Docker%20Compose%20%7C%20k3s-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
-**A high-performance, single-binary Go backend engineered with 21 strictly isolated bounded contexts, 50 automated SQL migrations, and validated under distributed load testing at 500 RPS with 100% success rate (p95 latency <85ms).**
+**A domain-driven modular Go backend monolith engineered with 21 isolated bounded contexts, PostgreSQL/PostGIS geospatial queries, atomic database transaction propagation, Redis Pub/Sub WebSockets, and 50 automated SQL migrations.**
 
-[System Architecture](#-system-architecture) • [Engineering Highlights](#-key-engineering-highlights) • [Bounded Contexts](#-bounded-context-catalog) • [Local Quickstart](#-quickstart--local-development) • [Benchmarks](#-performance--benchmarks) • [Contributors](#-contributors)
+[System Architecture](#-system-architecture) • [Engineering Highlights](#-key-engineering-highlights) • [Bounded Contexts](#-bounded-context-catalog) • [Failure & Rollback Scenarios](#-booking-failure--transaction-rollback-scenarios) • [Quickstart](#-quickstart--local-development) • [Provenance & Attribution](#-snapshot-provenance--contribution-attribution)
 
 ---
 
@@ -21,15 +21,15 @@
 
 ## 📌 Executive Summary
 
-**Medha Platform API** is an enterprise-grade backend engineered for high-concurrency event scheduling, geospatial service discovery, real-time messaging, and multi-tenant operational management.
+**Medha Platform API** is an enterprise backend engineered for event scheduling, geospatial service discovery, real-time messaging, and multi-tenant operational management.
 
-Rather than fragmenting operations across a sprawling microservice fleet with distributed network hops, the platform uses a **Domain-Driven Modular Monolith** architecture. All 21 functional domains operate within a single compiled Go binary with strict 4-layer boundary isolation, atomic PostgreSQL transactions via `GetExecutor(ctx, pool)`, and non-blocking asynchronous worker pools.
+Rather than fragmenting operations across a sprawling microservice fleet with distributed network hops and complex two-phase commits, the platform uses a **Domain-Driven Modular Monolith** architecture. All 21 functional domains operate within a single compiled Go binary with strict 4-layer boundary isolation, atomic PostgreSQL transactions via `GetExecutor(ctx, pool)` and `WithTx`, and non-blocking asynchronous worker pools.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              SYSTEM METRICS                                     │
+│                              SYSTEM ARCHITECTURE                                │
 ├───────────────────────┬─────────────────────────┬───────────────────────────────┤
-│  ⚡ 500 RPS (p95 <85ms)│  📦 21 Bounded Contexts │  🗄️ 50 Goose Migrations       │
+│  🧱 Modular Monolith  │  📦 21 Bounded Contexts │  🗄️ 50 Goose Migrations       │
 │  🗺️ PostGIS ST_DWithin│  💬 Redis Pub/Sub WS    │  🔒 JWT RS256 + RBAC Gate     │
 └───────────────────────┴─────────────────────────┴───────────────────────────────┘
 ```
@@ -121,14 +121,14 @@ WHERE ST_DWithin(location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $3
 ORDER BY distance_meters ASC
 LIMIT $4 OFFSET $5;
 ```
-- Custom spatial indices (`GIST (location)`) achieve sub-15ms execution across 100,000+ coordinates.
+- Custom spatial indices (`GIST (location)`) accelerate spatial bounding box filtering and distance calculations using PostgreSQL native spatial index operators.
 - Keyset and offset pagination formats preserve linear query plans under high paging depth.
 
 ### 3. Distributed WebSocket Pub/Sub Fan-Out
 Real-time messaging channels leverage a decoupled connection hub backed by Redis 8 Pub/Sub:
 - Direct WebSocket connections authenticate via short-lived JWTs during the initial handshake.
 - Ephemeral connection state is maintained in-memory on individual Go worker nodes (`sync.RWMutex` connection hubs).
-- Multi-node broadcast messages are published to Redis channels (`msg:conv:{id}`), allowing any cluster pod to fan out messages to connected subscribers in $<5\text{ms}$.
+- Multi-node broadcast messages are published to Redis channels (`msg:conv:{id}`), allowing any cluster pod to fan out messages to connected subscribers without localized affinity bottlenecks.
 
 ### 4. Resilient Fault-Tolerant Startup
 The application runtime features dual-mode boot resilience:
@@ -170,14 +170,106 @@ All API failure responses strictly conform to the **RFC 7807 (Problem Details fo
 
 ---
 
+---
+
+## 🛡️ Booking Failure & Transaction Rollback Scenarios
+
+The ceremony booking lifecycle represents the critical transactional core of the platform. It coordinates three bounded contexts: **Event**, **Matching**, and **Interest**. The implementation guards against concurrency anomalies, unauthorized state manipulation, and partial failure through transaction propagation and explicit state machines:
+
+```
+                  ┌─────────────────────────────────────────────────────────┐
+                  │               Yajman Confirms Booking                  │
+                  │              POST /api/v2/interest/{id}/book            │
+                  └────────────────────────────┬────────────────────────────┘
+                                               │
+                                               ▼
+                              ┌──────────────────────────────────┐
+                              │  Ownership & Auth Gate Check     │
+                              │  event.YajmanID == requesting_id │
+                              └────────────────┬─────────────────┘
+                                               │
+                                   ┌───────────┴───────────┐
+                            No     │                       │ Yes
+                    ┌──────────────▼──────┐                ▼
+                    │ 403 Forbidden       │     ┌─────────────────────┐
+                    │ ErrNotEventOwner    │     │ State Gate Check    │
+                    └─────────────────────┘     │ Status == Connected │
+                                                └──────────┬──────────┘
+                                                           │
+                                               ┌───────────┴───────────┐
+                                        No     │                       │ Yes
+                                ┌──────────────▼──────┐                ▼
+                                │ 400 Bad Request     │   ┌───────────────────────────────┐
+                                │ ErrNotConnected     │   │  database.WithTx(ctx, pool)   │
+                                └─────────────────────┘   └───────────────┬───────────────┘
+                                                                          │
+                                       ┌──────────────────────────────────┴──────────────────────────────────┐
+                                       │                                                                     │
+                                       ▼                                                                     ▼
+                        ┌───────────────────────────────┐                                     ┌───────────────────────────────┐
+                        │ Step 1: Interest -> Accepted  │                                     │ Step 2: Competing Leads       │
+                        │ interest.Status = 'accepted'  │                                     │ BulkRejectByEventID(other_ids)│
+                        └──────────────┬────────────────┘                                     └───────────────┬───────────────┘
+                                       │                                                                      │
+                                       └──────────────────────────────────┬───────────────────────────────────┘
+                                                                          │
+                                                                          ▼
+                                                       ┌──────────────────────────────────────┐
+                                                       │ Step 3: Event -> Booked              │
+                                                       │ event.Status = 'booked'              │
+                                                       └──────────────────┬───────────────────┘
+                                                                          │
+                                                      ┌───────────────────┴───────────────────┐
+                                              Success │                                       │ Error / Disk Full / Lock
+                                                      ▼                                       ▼
+                                           ┌─────────────────────┐                 ┌─────────────────────┐
+                                           │   COMMIT TX (200)   │                 │   ROLLBACK TX (500) │
+                                           │ Async WS + Push     │                 │ Zero State Mutated  │
+                                           └─────────────────────┘                 └─────────────────────┘
+```
+
+### 1. Authorization Failure Scenario (`ErrNotEventOwner`)
+If a client attempts to accept an interest or confirm a booking on an event owned by another user:
+- **Condition:** `event.YajmanID != caller.UserID`
+- **Result:** Fails immediately with `domain.ErrNotEventOwner` before opening a database transaction.
+- **HTTP Contract:** Returns `403 Forbidden` with RFC 7807 problem details:
+  ```json
+  {
+    "type": "https://api.medha.dev/errors/forbidden",
+    "title": "Forbidden",
+    "status": 403,
+    "detail": "You do not own this ceremony event.",
+    "code": "NOT_EVENT_OWNER"
+  }
+  ```
+
+### 2. Invalid State Machine Transition (`ErrInterestNotConnected`)
+A booking can only be confirmed if the Pandit's interest has previously been reviewed and moved to `Connected`:
+- **Condition:** `interest.Status != domain.InterestStatusConnected`
+- **Result:** Fails with `domain.ErrInterestNotConnected`. Prevents direct booking of cold leads or already-rejected applicants.
+- **HTTP Contract:** Returns `400 Bad Request` (`INTEREST_NOT_CONNECTED`).
+
+### 3. Atomic Database Rollback (`database.WithTx`)
+When confirming a booking, three separate tables across two bounded contexts must mutate atomically:
+1. `interests.status` $\rightarrow$ `accepted`
+2. All competing `interests` for that event $\rightarrow$ `rejected` (`BulkRejectByEventID`)
+3. `events.status` $\rightarrow$ `booked`
+
+If an error occurs during step 3 (e.g., database network partition, deadlocks, or constraint violation):
+- `WithTx` intercepts the error and executes `defer tx.Rollback(ctx)`.
+- **Guarantee:** None of the competing Pandits are rejected, the primary Pandit's interest remains `connected`, and the event remains `active`.
+- Proven in deterministic CI tests: `TestInterestService_ConfirmBooking_AtomicRollbackOnEventUpdateFailure`.
+
+---
+
 ## 🚀 Quickstart & Local Development
 
 ### Prerequisites
-- **Go:** `1.24+`
-- **Docker & Docker Compose:** `v2.20+`
-- **Goose:** `v3.24+` (database migrations)
+- **Go:** `1.25+` (or `1.24+`)
+- **Docker & Docker Compose:** `v2.20+` (optional for local database)
+- **Goose:** `v3.24+` (optional for migrations)
 
-### 1. Clone & Setup Environment
+### 1. Clone & Configure Environment
 ```bash
 git clone https://github.com/vi-nayKR/medha-platform-api.git
 cd medha-platform-api
@@ -186,60 +278,76 @@ cd medha-platform-api
 cp .env.example .env
 ```
 
-### 2. Start Infrastructure Containers
+### 2. Run the API Server (Immediate Dev Mode)
+The server features **resilient dual-mode startup**. In development mode (`ENVIRONMENT=development`), the application starts immediately even if PostgreSQL, Redis, or S3 are not running locally:
 ```bash
-# Spins up PostgreSQL 17 with PostGIS extension & Redis 8
-docker compose up -d postgres
+# Build and run the single binary
+go run ./cmd/medha-api/main.go
 ```
-
-### 3. Run Database Migrations
-```bash
-# Applies all 50 SQL migrations in sequence
-goose -dir migrations postgres "postgres://postgres:postgres@localhost:5432/medha_dev?sslmode=disable" up
-```
-
-### 4. Start the API Server
-```bash
-# Build and execute the API
-go run cmd/medha-api/main.go
-```
-
 The server will initialize on `http://localhost:8080`. Verify system health:
 ```bash
 curl -i http://localhost:8080/health
+```
+
+### 3. Full Infrastructure Stack (PostgreSQL 17 + PostGIS + Redis)
+To run the complete data tier with PostGIS geospatial queries and migrations:
+```bash
+# Start PostgreSQL 17 + PostGIS and Redis 8
+docker compose up -d postgres redis
+
+# Run all 50 SQL migrations in sequence
+make migrate-up
+
+# Start API with full database support
+make run
 ```
 
 ---
 
 ## 🧪 Testing & Code Quality
 
+The entire domain test suite runs with hand-written repository test doubles, eliminating the need for Docker or running database containers during CI test execution:
+
 ```bash
-# Run unit & integration tests with race condition detector
+# Run all unit & integration tests with race detector
 go test -race -v ./...
 
-# Run static analysis and linting
-golangci-lint run
+# Run transaction-specific tests
+go test -race -v ./internal/infra/database/... ./internal/interest/service/...
+
+# Build production binary
+CGO_ENABLED=0 go build -v -o bin/medha-api ./cmd/medha-api
 ```
 
 ---
 
-## 📊 Performance & Benchmarks
+## 📊 Verification & Benchmark Boundaries
 
-Simulated distributed load test results across 50 concurrent virtual users generating sustained requests:
-
-| Benchmark Scenario | Requests / Sec | p50 Latency | p95 Latency | Error Rate |
-| :--- | :--- | :--- | :--- | :--- |
-| **Health & Readiness Gate** | `5,240 RPS` | `1.2ms` | `3.4ms` | `0.00%` |
-| **PostGIS Proximity Search (50km)** | `780 RPS` | `18.4ms` | `42.1ms` | `0.00%` |
-| **Full Event State Transition** | `500 RPS` | `34.2ms` | `84.8ms` | `0.00%` |
-| **WebSocket Message Broadcast** | `1,200 msg/s` | `2.1ms` | `5.8ms` | `0.00%` |
+- **Unit & Race Test Coverage:** All 21 bounded contexts (Auth, Events, Matching, Interests, Notifications, Messaging, Panchanga, Social, Admin, Storage, Location) pass under the Go race condition detector (`go test -race ./...`).
+- **Transaction Safety:** Repository operations use `GetExecutor(ctx, pool)` to ensure atomic transactional participation across bounded contexts.
+- **Benchmark Disclosure:** Preliminary throughput and latency figures (e.g., 500 RPS / 780 RPS) reported in early design notes represent historical internal simulation targets. They are not published production service level agreements and will be updated when committed, reproducible benchmark harnesses are checked in.
+- **Architecture Scalability Ceiling:** In the single-node modular monolith topology, PostgreSQL acts as the single primary writer. Real-time chat messaging and high-frequency geolocation updates are isolated as the primary candidates for read replica offloading or service extraction under sustained write pressure.
 
 ---
 
-## 👥 Contributors
+## 👥 Snapshot Provenance & Contribution Attribution
 
-- **Vinay K R** ([@vi-nayKR](https://github.com/vi-nayKR)) — Lead Architect & Core Backend Engineer
-- **Koushik H R** ([@koushik-hr](https://github.com/koushikhr)) — Co-Architect & Infrastructure Engineer
+### Repository Provenance
+- **Snapshot Origin:** Exported from the collaborative product backend repository `medha-innovations/medha-api` (`dev` branch, commit baseline `cf75ee8`).
+- **Sanitization:** Internal domains have been sanitized to `medha.dev` (`api.medha.dev`, `admin.medha.dev`, `support.medha.dev`). Production credentials, secrets, and private signing keys are excluded; `.env.example` provides complete development configuration keys.
+- **Deployment Topology:** The initial infrastructure baseline documented in `medha-platform-infra` utilized Kubernetes (k3s) and ArgoCD manifests. The running operational topology was subsequently transitioned to a two-node Docker Compose architecture for operational simplicity and cost efficiency.
+
+### Contribution Ownership
+- **Vinay K R** ([@vi-nayKR](https://github.com/vi-nayKR)) — *Co-Architect & Core Backend Engineer*:
+  - Designed the 21-domain modular monolith architecture and 4-layer boundary isolation (`domain/service/repository/handler`).
+  - Authored the transaction propagation framework (`GetExecutor(ctx, pool)` and `WithTx`).
+  - Engineered PostGIS spatial proximity queries (`ST_DWithin` with GIST index acceleration) and keyset pagination.
+  - Built the JWT RS256 authentication and scoped role-based access control (RBAC) middleware.
+  - Implemented the decoupled Redis 8 Pub/Sub WebSocket connection hub (`platform/ws`) and real-time messaging pipeline.
+  - Implemented event lifecycle and multi-party booking state machines (`Event` $\rightarrow$ `Matching` $\rightarrow$ `Interest`).
+  - Standardized RFC 7807 error problem contracts across all HTTP endpoints.
+- **Koushik H R** ([@koushik-hr](https://github.com/koushikhr)) — *Co-Architect & Infrastructure Engineer*:
+  - Co-architected infrastructure operations, Docker Compose & k3s deployment pipelines, mobile client applications (Android / iOS), and admin dashboard integration.
 
 ---
 
