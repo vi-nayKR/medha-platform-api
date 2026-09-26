@@ -233,7 +233,7 @@ The ceremony booking lifecycle represents the critical transactional core of the
                                                       ▼                                       ▼
                                            ┌─────────────────────┐                 ┌─────────────────────┐
                                            │   COMMIT TX (200)   │                 │   ROLLBACK TX (500) │
-                                           │ Async WS + Push     │                 │ Zero State Mutated  │
+                                           │ Async WS + Push     │                 │ No DB Rows Committed│
                                            └─────────────────────┘                 └─────────────────────┘
 ```
 
@@ -259,15 +259,28 @@ A booking can only be confirmed if the Pandit's interest has previously been rev
 - **HTTP Contract:** Returns `400 Bad Request` (`INTEREST_NOT_CONNECTED`).
 
 ### 3. Atomic Database Rollback (`database.WithTx`)
-When confirming a booking, three separate tables across two bounded contexts must mutate atomically:
-1. `interests.status` $\rightarrow$ `accepted`
-2. All competing `interests` for that event $\rightarrow$ `rejected` (`BulkRejectByEventID`)
-3. `events.status` $\rightarrow$ `booked`
+The PostgreSQL transaction changes two tables:
+1. `interests.status` $\rightarrow$ `accepted` for the selected Pandit.
+2. Competing `interests` $\rightarrow$ `rejected` and `events.status` $\rightarrow$ `booked`.
 
-If an error occurs during step 3 (e.g., database network partition, deadlocks, or constraint violation):
-- `WithTx` intercepts the error and executes `defer tx.Rollback(ctx)`.
-- **Guarantee:** None of the competing Pandits are rejected, the primary Pandit's interest remains `connected`, and the event remains `active`.
-- The deterministic `TestInterestService_ConfirmBooking_AtomicRollbackOnEventUpdateFailure` injects a fake transaction and confirms the error path. It does not assert persisted state or prove PostgreSQL rollback. A database integration test is still needed.
+If the event update fails, `WithTx` rolls back both interest updates. The
+PostgreSQL integration test installs a trigger that rejects the `Booked` update,
+then verifies the event stays `Active` and both interests stay `connected`.
+It uses an isolated schema with the relevant tables plus the production service,
+repositories, and transaction helper; it does not run all 50 migrations or
+simulate a network partition or deadlock.
+
+After the database commit, `ConfirmBooking` attempts the related match transition.
+If that separate update fails, the service logs the failure and keeps the
+booking transaction committed. The rollback test does not exercise match repair
+or notification delivery, so those remain separate recovery concerns.
+
+Run the rollback and concurrency proof against a dedicated test database:
+
+```bash
+MEDHA_TEST_DATABASE_URL='postgres://user:pass@localhost:5432/medha_test?sslmode=disable' \
+  go test -race -v ./internal/interest/service -run TestConfirmBookingPostgresConcurrencyAndRollback
+```
 
 ---
 
