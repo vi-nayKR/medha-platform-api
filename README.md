@@ -15,6 +15,15 @@
 
 [System Architecture](#-system-architecture) • [Engineering Highlights](#-key-engineering-highlights) • [Bounded Contexts](#-bounded-context-catalog) • [Failure & Rollback Scenarios](#-booking-failure--transaction-rollback-scenarios) • [Quickstart](#-quickstart--local-development) • [Provenance & Attribution](#-snapshot-provenance--contribution-attribution)
 
+### Read the booking flow in 10 minutes
+
+1. [HTTP handler](internal/interest/handler/interest_yajman_handler.go) obtains the authenticated user ID and calls `ConfirmBooking`.
+2. [Service](internal/interest/service/interest_service.go) checks ownership and the connected state, then updates the selected interest, competing interests, and event within `WithTx`.
+3. [Transaction helper](internal/infra/database/tx.go) injects the transaction into context; the [interest](internal/interest/repository/postgres_interest_repo.go) and [event](internal/event/repository/postgres_event_repo.go) repositories obtain it through `GetExecutor`.
+4. [Service tests](internal/interest/service/interest_service_test.go) exercise authorization, state checks, competing-interest handling, and error propagation with fakes. [Transaction helper tests](internal/infra/database/tx_test.go) check context behavior. These do not verify rollback or concurrent bookings against PostgreSQL.
+
+The intended invariant is one accepted interest per booked event. The current snapshot has no database-backed concurrency test for that invariant, so treat competing confirmations as an open verification gap.
+
 ---
 
 </div>
@@ -98,14 +107,14 @@ flowchart TD
 ## ⚡ Key Engineering Highlights
 
 ### 1. Strict 4-Layer Bounded Context Architecture
-Every domain under `internal/<domain>/` is physically structured with zero cross-layer bypassing:
+Domains under `internal/<domain>/` generally use this four-layer structure; the snapshot does not enforce every import boundary automatically:
 ```
 HTTP Request ──► [ Handler ] ──► [ Service ] ──► [ Repository ] ──► [ PostgreSQL / Redis ]
                     │               │                │
                     ▼               ▼                ▼
                  HTTP DTOs     Business Rules   SQL / Queries
 ```
-- **Downward Dependencies Only:** A layer never imports past its adjacent layer.
+- **Layered Dependencies:** Handlers, services, and repositories are organized around the domain flow; inspect imports when extending a context.
 - **Pure Interface Abstractions:** Hand-written test doubles enable exhaustive testing without complex mocking frameworks or slow runtime reflection.
 - **Atomic Cross-Repository Transactions:** Every repository executes via `GetExecutor(ctx, pool)`, allowing a single database transaction (`pgx.Tx`) to span across multiple bounded contexts without leaky abstractions.
 - **Setter Dependency Injection:** Cross-context relationships (e.g., `Event` → `Notification`) are wired in `cmd/medha-api/main.go` via explicit setter injection, eliminating circular import cycles.
@@ -258,7 +267,7 @@ When confirming a booking, three separate tables across two bounded contexts mus
 If an error occurs during step 3 (e.g., database network partition, deadlocks, or constraint violation):
 - `WithTx` intercepts the error and executes `defer tx.Rollback(ctx)`.
 - **Guarantee:** None of the competing Pandits are rejected, the primary Pandit's interest remains `connected`, and the event remains `active`.
-- Proven in deterministic CI tests: `TestInterestService_ConfirmBooking_AtomicRollbackOnEventUpdateFailure`.
+- The deterministic `TestInterestService_ConfirmBooking_AtomicRollbackOnEventUpdateFailure` injects a fake transaction and confirms the error path. It does not assert persisted state or prove PostgreSQL rollback. A database integration test is still needed.
 
 ---
 
@@ -309,7 +318,7 @@ make run
 The entire domain test suite runs with hand-written repository test doubles, eliminating the need for Docker or running database containers during CI test execution:
 
 ```bash
-# Run all unit & integration tests with race detector
+# Run the deterministic suite with race detector
 go test -race -v ./...
 
 # Run transaction-specific tests
@@ -324,7 +333,7 @@ CGO_ENABLED=0 go build -v -o bin/medha-api ./cmd/medha-api
 ## 📊 Verification & Benchmark Boundaries
 
 - **Unit & Race Test Coverage:** All 21 bounded contexts (Auth, Events, Matching, Interests, Notifications, Messaging, Panchanga, Social, Admin, Storage, Location) pass under the Go race condition detector (`go test -race ./...`).
-- **Transaction Safety:** Repository operations use `GetExecutor(ctx, pool)` to ensure atomic transactional participation across bounded contexts.
+- **Transaction Boundary:** Booking repositories use `GetExecutor(ctx, pool)` to share a transaction. PostgreSQL rollback and concurrent-booking behavior still need database integration tests.
 - **Benchmark Disclosure:** Preliminary throughput and latency figures (e.g., 500 RPS / 780 RPS) reported in early design notes represent historical internal simulation targets. They are not published production service level agreements and will be updated when committed, reproducible benchmark harnesses are checked in.
 - **Architecture Scalability Ceiling:** In the single-node modular monolith topology, PostgreSQL acts as the single primary writer. Real-time chat messaging and high-frequency geolocation updates are isolated as the primary candidates for read replica offloading or service extraction under sustained write pressure.
 
@@ -335,7 +344,7 @@ CGO_ENABLED=0 go build -v -o bin/medha-api ./cmd/medha-api
 ### Repository Provenance
 - **Snapshot Origin:** Exported from the collaborative product backend repository `medha-innovations/medha-api` (`dev` branch, commit baseline `cf75ee8`).
 - **Sanitization:** Internal domains have been sanitized to `medha.dev` (`api.medha.dev`, `admin.medha.dev`, `support.medha.dev`). Production credentials, secrets, and private signing keys are excluded; `.env.example` provides complete development configuration keys.
-- **Deployment Topology:** The initial infrastructure baseline documented in `medha-platform-infra` utilized Kubernetes (k3s) and ArgoCD manifests. The running operational topology was subsequently transitioned to a two-node Docker Compose architecture for operational simplicity and cost efficiency.
+- **Deployment History:** The `medha-platform-infra` repository documents a k3s/ArgoCD baseline, while this snapshot includes Docker Compose configuration. These artifacts do not verify the current running topology or establish a dated transition.
 
 ### Contribution Ownership
 - **Vinay K R** ([@vi-nayKR](https://github.com/vi-nayKR)) — *Co-Architect & Core Backend Engineer*:
