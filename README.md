@@ -20,9 +20,9 @@
 1. [HTTP handler](internal/interest/handler/interest_yajman_handler.go) obtains the authenticated user ID and calls `ConfirmBooking`.
 2. [Service](internal/interest/service/interest_service.go) checks ownership and the connected state, then updates the selected interest, competing interests, and event within `WithTx`.
 3. [Transaction helper](internal/infra/database/tx.go) injects the transaction into context; the [interest](internal/interest/repository/postgres_interest_repo.go) and [event](internal/event/repository/postgres_event_repo.go) repositories obtain it through `GetExecutor`.
-4. [Service tests](internal/interest/service/interest_service_test.go) exercise authorization, state checks, competing-interest handling, and error propagation with fakes. [Transaction helper tests](internal/infra/database/tx_test.go) check context behavior. These do not verify rollback or concurrent bookings against PostgreSQL.
+4. [Unit tests](internal/interest/service/interest_service_test.go) cover authorization and state checks with fakes. The opt-in [PostgreSQL integration test](internal/interest/service/booking_postgres_integration_test.go) forces two callers past the initial read, then verifies a single accepted booking and rollback after a database failure.
 
-The intended invariant is one accepted interest per booked event. The current snapshot has no database-backed concurrency test for that invariant, so treat competing confirmations as an open verification gap.
+`ConfirmBooking` locks the event row before re-reading the selected interest and applying the status changes. PostgreSQL serializes competing confirmations on that event; the test verifies the invariant using the production transaction helper and repositories.
 
 ---
 
@@ -315,7 +315,7 @@ make run
 
 ## 🧪 Testing & Code Quality
 
-The entire domain test suite runs with hand-written repository test doubles, eliminating the need for Docker or running database containers during CI test execution:
+Most domain tests use repository doubles. CI also runs the focused booking integration test against a temporary PostgreSQL service. To run it locally, set `MEDHA_TEST_DATABASE_URL` to a dedicated test database URL; the test creates and drops an isolated schema and must not point at production data.
 
 ```bash
 # Run the deterministic suite with race detector
@@ -323,6 +323,9 @@ go test -race -v ./...
 
 # Run transaction-specific tests
 go test -race -v ./internal/infra/database/... ./internal/interest/service/...
+
+# Include the PostgreSQL booking concurrency and rollback test
+MEDHA_TEST_DATABASE_URL='postgres://user:pass@localhost:5432/medha_test?sslmode=disable' go test -race -v ./internal/interest/service -run TestConfirmBookingPostgresConcurrencyAndRollback
 
 # Build production binary
 CGO_ENABLED=0 go build -v -o bin/medha-api ./cmd/medha-api
@@ -333,7 +336,7 @@ CGO_ENABLED=0 go build -v -o bin/medha-api ./cmd/medha-api
 ## 📊 Verification & Benchmark Boundaries
 
 - **Unit & Race Test Coverage:** All 21 bounded contexts (Auth, Events, Matching, Interests, Notifications, Messaging, Panchanga, Social, Admin, Storage, Location) pass under the Go race condition detector (`go test -race ./...`).
-- **Transaction Boundary:** Booking repositories use `GetExecutor(ctx, pool)` to share a transaction. PostgreSQL rollback and concurrent-booking behavior still need database integration tests.
+- **Transaction Boundary:** Booking repositories use `GetExecutor(ctx, pool)` to share a transaction. PostgreSQL-backed tests prove competing confirmation serialization and rollback; other transaction paths still have unit-level coverage only.
 - **Benchmark Disclosure:** Preliminary throughput and latency figures (e.g., 500 RPS / 780 RPS) reported in early design notes represent historical internal simulation targets. They are not published production service level agreements and will be updated when committed, reproducible benchmark harnesses are checked in.
 - **Architecture Scalability Ceiling:** In the single-node modular monolith topology, PostgreSQL acts as the single primary writer. Real-time chat messaging and high-frequency geolocation updates are isolated as the primary candidates for read replica offloading or service extraction under sustained write pressure.
 

@@ -115,6 +115,24 @@ func (r *PostgresEventRepository) GetByID(ctx context.Context, id uuid.UUID) (*d
 	return r.scanEvent(ctx, query, id)
 }
 
+// LockForBooking serializes booking attempts for the same event until the caller's transaction ends.
+func (r *PostgresEventRepository) LockForBooking(ctx context.Context, id uuid.UUID) (*domain.Event, error) {
+	var event domain.Event
+	err := database.GetExecutor(ctx, r.pool).QueryRow(ctx, `
+		SELECT id, yajman_id, status
+		FROM events
+		WHERE id = $1 AND deleted_at IS NULL
+		FOR UPDATE
+	`, id).Scan(&event.ID, &event.YajmanID, &event.Status)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, domain.ErrEventNotFound
+		}
+		return nil, fmt.Errorf("lock event for booking: %w", err)
+	}
+	return &event, nil
+}
+
 // Update modifies an existing non-deleted event.
 func (r *PostgresEventRepository) Update(ctx context.Context, event *domain.Event) error {
 	query := `

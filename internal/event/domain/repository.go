@@ -24,6 +24,9 @@ type EventRepository interface {
 	// Returns ErrEventNotFound if no event exists.
 	GetByID(ctx context.Context, id uuid.UUID) (*Event, error)
 
+	// LockForBooking returns a non-deleted event while holding its row lock for the transaction.
+	LockForBooking(ctx context.Context, id uuid.UUID) (*Event, error)
+
 	// Update modifies an existing non-deleted event.
 	// Returns ErrEventNotFound if event doesn't exist or is deleted.
 	Update(ctx context.Context, event *Event) error

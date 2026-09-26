@@ -27,7 +27,7 @@ type InterestService struct {
 	eventRepo    eventdomain.EventRepository
 	matchSvc     *matchservice.MatchService
 	userRepo     userdomain.UserRepository
-	notifSvc     *notifservice.NotificationService // optional — nil-safe
+	notifSvc     *notifservice.NotificationService  // optional — nil-safe
 	msgSvc       *messagingservice.MessagingService // optional — nil-safe
 	logger       *slog.Logger
 }
@@ -43,7 +43,6 @@ func NewInterestService(pool *pgxpool.Pool, interestRepo domain.InterestReposito
 		logger:       logger,
 	}
 }
-
 
 // SetNotificationService wires the optional notification service for push notification triggers.
 func (s *InterestService) SetNotificationService(notifSvc *notifservice.NotificationService) {
@@ -108,7 +107,6 @@ func (s *InterestService) ExpressInterest(ctx context.Context, params ExpressInt
 			)
 		}
 	}
-
 
 	// Re-fetch to get timestamps
 	created, err := s.interestRepo.GetByID(ctx, interest.ID)
@@ -400,35 +398,41 @@ func (s *InterestService) ConfirmBooking(ctx context.Context, interestID, yajman
 		return nil, domain.ErrInterestNotConnected
 	}
 
-	// Find matching match record to accept
-	var matchID uuid.UUID
-	if s.matchSvc != nil {
-		existingMatch, matchErr := s.matchSvc.FindByPanditAndEvent(ctx, interest.PanditID, interest.EventID)
-		if matchErr != nil {
-			s.logger.Warn("could not find match to accept",
-				"error", matchErr,
-				"pandit_id", interest.PanditID,
-				"event_id", interest.EventID,
-			)
-		} else {
-			matchID = existingMatch.ID
-		}
-	}
-
-	// Perform database status transitions atomically
+	// Lock the event row before rechecking state so simultaneous requests cannot book different pandits.
+	var bookedInterest *domain.Interest
 	err = database.WithTx(ctx, s.pool, func(txCtx context.Context) error {
+		lockedEvent, err := s.eventRepo.LockForBooking(txCtx, interest.EventID)
+		if err != nil {
+			return fmt.Errorf("lock event for booking: %w", err)
+		}
+		if lockedEvent.YajmanID != yajmanID {
+			return domain.ErrNotEventOwner
+		}
+		if !lockedEvent.IsActive() {
+			return eventdomain.ErrEventNotActive
+		}
+
+		// Read the interest after acquiring the event lock; another booking may have rejected it while we waited.
+		bookedInterest, err = s.interestRepo.GetByID(txCtx, interestID)
+		if err != nil {
+			return fmt.Errorf("get interest for booking: %w", err)
+		}
+		if bookedInterest.Status != domain.InterestStatusConnected {
+			return domain.ErrInterestNotConnected
+		}
+
 		// Update this interest status to accepted
 		if err := s.interestRepo.UpdateStatus(txCtx, interestID, domain.InterestStatusAccepted); err != nil {
 			return fmt.Errorf("update interest status to accepted: %w", err)
 		}
 
 		// Bulk reject all other active interests
-		if err := s.interestRepo.BulkRejectByEventID(txCtx, interest.EventID, interest.PanditID); err != nil {
+		if err := s.interestRepo.BulkRejectByEventID(txCtx, bookedInterest.EventID, bookedInterest.PanditID); err != nil {
 			return fmt.Errorf("bulk reject other interests: %w", err)
 		}
 
 		// Update event status to booked
-		if err := s.eventRepo.UpdateStatus(txCtx, interest.EventID, eventdomain.EventStatusBooked); err != nil {
+		if err := s.eventRepo.UpdateStatus(txCtx, bookedInterest.EventID, eventdomain.EventStatusBooked); err != nil {
 			return fmt.Errorf("update event status to booked: %w", err)
 		}
 
@@ -438,22 +442,21 @@ func (s *InterestService) ConfirmBooking(ctx context.Context, interestID, yajman
 		return nil, err
 	}
 
-	// Transition match and trigger notifications asynchronously using s.matchSvc.BookMatch
-	if s.matchSvc != nil && matchID != uuid.Nil {
-		_, acceptErr := s.matchSvc.BookMatch(ctx, matchID, yajmanID)
-		if acceptErr != nil {
-			s.logger.Error("failed to book match on booking confirmation",
-				"error", acceptErr,
-				"match_id", matchID,
-			)
+	// Transition the related match after the database state commits.
+	if s.matchSvc != nil {
+		existingMatch, matchErr := s.matchSvc.FindByPanditAndEvent(ctx, bookedInterest.PanditID, bookedInterest.EventID)
+		if matchErr != nil {
+			s.logger.Warn("could not find match to book", "error", matchErr, "event_id", bookedInterest.EventID)
+		} else if _, acceptErr := s.matchSvc.BookMatch(ctx, existingMatch.ID, yajmanID); acceptErr != nil {
+			s.logger.Error("failed to book match on booking confirmation", "error", acceptErr, "match_id", existingMatch.ID)
 		}
 	}
 
 	s.logger.Info("booking confirmed",
 		"interest_id", interestID,
 		"yajman_id", yajmanID,
-		"pandit_id", interest.PanditID,
-		"event_id", interest.EventID,
+		"pandit_id", bookedInterest.PanditID,
+		"event_id", bookedInterest.EventID,
 	)
 
 	return s.interestRepo.GetByID(ctx, interestID)

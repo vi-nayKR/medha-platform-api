@@ -174,6 +174,10 @@ func (m *mockEventRepo) GetByID(_ context.Context, id uuid.UUID) (*eventdomain.E
 	return event, nil
 }
 
+func (m *mockEventRepo) LockForBooking(ctx context.Context, id uuid.UUID) (*eventdomain.Event, error) {
+	return m.GetByID(ctx, id)
+}
+
 func (m *mockEventRepo) Update(_ context.Context, _ *eventdomain.Event) error {
 	return nil
 }
