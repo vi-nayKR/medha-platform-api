@@ -28,10 +28,7 @@ flowchart LR
   API -->|push| FCM[FCM / push providers]
 ```
 
-`medha-api` builds a container image; [`medha-infra`](../medha-infra) decides where it runs and
-which hostnames reach it. As of 2026-07-22, the same `db5827f` API image is pinned in both the dev
-and production overlays, completing the end-to-end backend rollout. `medha-ios` remains under
-incremental polish; it does not require a different backend topology.
+This public snapshot demonstrates the API and a historical deployment model. The diagram above is not verification of current production topology, image revisions or client integration. The companion infrastructure snapshot contains both Kubernetes history and a dated two-node Docker runbook. See [publication review](docs/PUBLICATION_REVIEW.md); deployment workflows are inactive reference files.
 
 ## 2. Process & runtime model
 

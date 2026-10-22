@@ -262,13 +262,14 @@ func (c *messageCentralClient) VerifyOTP(ctx context.Context, verificationID str
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 500 {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("%w: verify otp http %d: %s", ErrProviderDown, resp.StatusCode, string(body))
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("%w: verify otp http %d", ErrProviderDown, resp.StatusCode)
 	}
 
-	body, _ := io.ReadAll(resp.Body)
-	c.logger.Debug("mc verify raw response", "body", string(body))
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("%w: read verify otp response: %v", ErrProviderDown, err)
+	}
 
 	var valResp validateOTPResponse
 	if err := json.Unmarshal(body, &valResp); err != nil {
@@ -281,14 +282,17 @@ func (c *messageCentralClient) VerifyOTP(ctx context.Context, verificationID str
 	case 200:
 		// Some provider responses can carry verification outcome in status text.
 		switch statusUpper {
-		case "", "VERIFICATION_COMPLETED", "ALREADY_VERIFIED", "SUCCESS":
+		case "VERIFICATION_COMPLETED", "SUCCESS":
 			return nil
+		case "ALREADY_VERIFIED":
+			return ErrAlreadyVerified
 		case "VERIFICATION_FAILED", "FAILED", "INVALID_OTP":
 			return ErrWrongOTP
 		case "OTP_EXPIRED", "EXPIRED":
 			return ErrOTPExpired
 		}
-		return nil
+		// An HTTP/business success code alone is not proof of verification.
+		return fmt.Errorf("%w: unrecognized verification outcome", ErrProviderDown)
 	case 702:
 		return ErrWrongOTP
 	case 703:

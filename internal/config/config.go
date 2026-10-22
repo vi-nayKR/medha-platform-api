@@ -246,9 +246,9 @@ func Load() (*Config, error) {
 // the same short service names as dev; Kubernetes namespace DNS is the isolation
 // boundary for those targets. localhost/127.0.0.1 count as dev.
 //
-// ponytail: substring match on connection targets. It cannot see through a local
-// port-forward tunnel (e.g. prod DB mapped to localhost:5433 via connect_prod_db.bat);
-// that deliberate break-glass path is out of scope here.
+// This is a substring check on connection targets. It cannot identify the remote
+// destination behind a localhost port-forward; never point development processes
+// at production tunnels. Operator connection helpers are excluded from this snapshot.
 func checkEnvInfraConsistency(isProd bool, targets ...string) error {
 	const devMarker = "dev"   // -dev-service, medha_dev, localhost/127.0.0.1 handled below
 	const prodMarker = "prod" // -prod-service

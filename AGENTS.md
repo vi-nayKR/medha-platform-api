@@ -1,5 +1,7 @@
 # AGENTS.md — Medha API
 
+> **Public snapshot boundary (2026-10-22):** This checkout is a portfolio/reference derivative, not the private product's deployment source. Never deploy it or reconnect inactive workflow examples as part of publication cleanup. See `docs/PUBLICATION_REVIEW.md`. Deployment instructions and dated delivery assertions below are historical context; code conventions still apply. Fixed-code reviewer authentication is prohibited, and account-specific seed migrations are intentionally no-ops.
+
 > **Cross-tool agent guide.** This file is the single source of truth for AI coding agents in
 > this repository, written to the open [AGENTS.md](https://agents.md) convention.
 >

@@ -1,6 +1,8 @@
 <div align="center">
 
 # 🏛️ Medha Platform API
+
+> **Public reference snapshot — not an operational deployment source.** Account-specific seeds and the fixed-code reviewer bypass are removed; deployment/release workflows are retained only as inactive documentation. See [publication review and remaining history/owner actions](docs/PUBLICATION_REVIEW.md). No running deployment is changed by these fixes.
 ### Domain-Driven Modular Go Backend · PostGIS Proximity Engine · Distributed WebSocket Pub/Sub
 
 [![CI](https://github.com/vi-nayKR/medha-platform-api/actions/workflows/ci.yml/badge.svg)](https://github.com/vi-nayKR/medha-platform-api/actions/workflows/ci.yml)
@@ -287,7 +289,7 @@ MEDHA_TEST_DATABASE_URL='postgres://user:pass@localhost:5432/medha_test?sslmode=
 ## 🚀 Quickstart & Local Development
 
 ### Prerequisites
-- **Go:** `1.25+` (or `1.24+`)
+- **Go:** `1.25+` (as required by `go.mod`)
 - **Docker & Docker Compose:** `v2.20+` (optional for local database)
 - **Goose:** `v3.24+` (optional for migrations)
 
@@ -300,8 +302,8 @@ cd medha-platform-api
 cp .env.example .env
 ```
 
-### 2. Run the API Server (Immediate Dev Mode)
-The server features **resilient dual-mode startup**. In development mode (`ENVIRONMENT=development`), the application starts immediately even if PostgreSQL, Redis, or S3 are not running locally:
+### 2. Configure and run locally
+Fill the required entries in `.env.example` using local-only service credentials, set `ENVIRONMENT=development`, and generate development JWT keys with `make keys`. Blank configuration does not pass startup validation. Development has nil-safe dependency handling, but that is not a guarantee that every configuration or missing service starts successfully:
 ```bash
 # Build and run the single binary
 go run ./cmd/medha-api/main.go
@@ -311,18 +313,14 @@ The server will initialize on `http://localhost:8080`. Verify system health:
 curl -i http://localhost:8080/health
 ```
 
-### 3. Full Infrastructure Stack (PostgreSQL 17 + PostGIS + Redis)
-To run the complete data tier with PostGIS geospatial queries and migrations:
+### 3. Local PostgreSQL reference
+The checked-in Compose file defines PostgreSQL/PostGIS, **not Redis**. Configure its three PostgreSQL variables in your local `.env`, then start only that service:
 ```bash
-# Start PostgreSQL 17 + PostGIS and Redis 8
-docker compose up -d postgres redis
-
-# Run all 50 SQL migrations in sequence
+docker compose up -d postgres
 make migrate-up
-
-# Start API with full database support
 make run
 ```
+Provision Redis/S3 separately when exercising features that require them. The legacy Compose API service is not a validated quickstart. Schema migrations no longer create developer/reviewer users; use normal onboarding or the explicitly development-only login path with local fixtures. Setup/start helpers that expect sibling repositories are historical operator conveniences, not standalone setup requirements.
 
 ---
 
@@ -359,7 +357,7 @@ CGO_ENABLED=0 go build -v -o bin/medha-api ./cmd/medha-api
 
 ### Repository Provenance
 - **Snapshot Origin:** Exported from the collaborative product backend repository `medha-innovations/medha-api` (`dev` branch, commit baseline `cf75ee8`).
-- **Sanitization:** Internal domains have been sanitized to `medha.dev` (`api.medha.dev`, `admin.medha.dev`, `support.medha.dev`). Production credentials, secrets, and private signing keys are excluded; `.env.example` provides complete development configuration keys.
+- **Publication boundary:** Example domains use `medha.dev`; `.env.example` lists blank configuration keys. Targeted fixes and scan results are documented in [PUBLICATION_REVIEW.md](docs/PUBLICATION_REVIEW.md). This is not certification that every artifact/history entry is safe; prior commits remain available and owner-controlled deployment/session review is still required.
 - **Deployment History:** The `medha-platform-infra` repository documents a k3s/ArgoCD baseline, while this snapshot includes Docker Compose configuration. These artifacts do not verify the current running topology or establish a dated transition.
 
 ### Contribution Ownership
