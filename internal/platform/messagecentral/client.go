@@ -143,12 +143,15 @@ type sendOTPResponse struct {
 
 // SendOTP implements Client.
 func (c *messageCentralClient) SendOTP(ctx context.Context, phone string, countryCode string) (string, error) {
-	// Rate limiting — gracefully skip if Redis is unavailable
+	// Redis is required for the phone/challenge binding, not an optional cache.
+	if c.redis == nil {
+		return "", fmt.Errorf("%w: OTP binding store unavailable", ErrProviderDown)
+	}
 	rateLimitKey := fmt.Sprintf("mc:rate:%s", phone)
 	if c.redis != nil {
 		count, err := c.redis.Get(ctx, rateLimitKey).Int()
 		if err != nil && err != redis.Nil {
-			c.logger.Warn("redis unavailable for rate limit check; skipping", "error", err)
+			return "", fmt.Errorf("%w: OTP binding store unavailable", ErrProviderDown)
 		} else if count >= maxSendsPerHour {
 			return "", ErrRateLimitExceeded
 		}
@@ -211,12 +214,15 @@ func (c *messageCentralClient) SendOTP(ctx context.Context, phone string, countr
 	}
 
 	verificationID := sendResp.Data.VerificationID
+	if strings.TrimSpace(verificationID) == "" {
+		return "", fmt.Errorf("%w: empty verification challenge", ErrProviderDown)
+	}
 
-	// Store verificationId in Redis (best-effort; if Redis is down we still return the ID)
+	// Do not report success unless the server can bind this challenge.
 	otpKey := fmt.Sprintf("mc:otp:%s", phone)
 	if c.redis != nil {
 		if err := c.redis.Set(ctx, otpKey, verificationID, otpVerifTTL).Err(); err != nil {
-			c.logger.Warn("failed to store verification id in redis", "error", err, "phone", phone)
+			return "", fmt.Errorf("%w: cannot persist OTP binding", ErrProviderDown)
 		}
 		// Increment rate limit counter
 		newCount, incrErr := c.redis.Incr(ctx, rateLimitKey).Result()
@@ -262,13 +268,14 @@ func (c *messageCentralClient) VerifyOTP(ctx context.Context, verificationID str
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 500 {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("%w: verify otp http %d: %s", ErrProviderDown, resp.StatusCode, string(body))
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("%w: verify otp http %d", ErrProviderDown, resp.StatusCode)
 	}
 
-	body, _ := io.ReadAll(resp.Body)
-	c.logger.Debug("mc verify raw response", "body", string(body))
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("%w: read verify otp response: %v", ErrProviderDown, err)
+	}
 
 	var valResp validateOTPResponse
 	if err := json.Unmarshal(body, &valResp); err != nil {
@@ -281,14 +288,17 @@ func (c *messageCentralClient) VerifyOTP(ctx context.Context, verificationID str
 	case 200:
 		// Some provider responses can carry verification outcome in status text.
 		switch statusUpper {
-		case "", "VERIFICATION_COMPLETED", "ALREADY_VERIFIED", "SUCCESS":
+		case "VERIFICATION_COMPLETED", "SUCCESS":
 			return nil
+		case "ALREADY_VERIFIED":
+			return ErrAlreadyVerified
 		case "VERIFICATION_FAILED", "FAILED", "INVALID_OTP":
 			return ErrWrongOTP
 		case "OTP_EXPIRED", "EXPIRED":
 			return ErrOTPExpired
 		}
-		return nil
+		// An HTTP/business success code alone is not proof of verification.
+		return fmt.Errorf("%w: unrecognized verification outcome", ErrProviderDown)
 	case 702:
 		return ErrWrongOTP
 	case 703:

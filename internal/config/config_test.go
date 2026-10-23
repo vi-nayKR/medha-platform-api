@@ -11,7 +11,7 @@ func setRequiredEnv(t *testing.T, environment string) {
 	database := "medha_dev"
 	if environment == "production" {
 		database = "medha_prod"
-		t.Setenv("CREDENTIALS_ENCRYPTION_KEY", "0123456789abcdef0123456789abcdef")
+		t.Setenv("CREDENTIALS_ENCRYPTION_KEY", strings.Repeat("test", 8))
 	}
 	t.Setenv("DATABASE_URL", "postgres://user:test@postgres:5432/"+database+"?sslmode=disable")
 	t.Setenv("REDIS_URL", "redis://redis:6379/0")

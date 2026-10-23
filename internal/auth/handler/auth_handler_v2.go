@@ -22,10 +22,18 @@ import (
 	"github.com/medha/backend/pkg/response"
 )
 
+// OTPStore is the small cache contract needed to bind a provider challenge to
+// the phone that requested it. It supports hand-written fakes without a server.
+type OTPStore interface {
+	Get(ctx context.Context, key string) *redis.StringCmd
+	Set(ctx context.Context, key string, value interface{}, expiration time.Duration) *redis.StatusCmd
+	Del(ctx context.Context, keys ...string) *redis.IntCmd
+}
+
 // AuthHandlerV2 handles V2 authentication HTTP endpoints.
 type AuthHandlerV2 struct {
 	authService *authsvc.AuthServiceV2
-	redis       *redis.Client
+	redis       OTPStore
 	validate    *validator.Validate
 	logger      *slog.Logger
 	panditPhone string // DEV-ONLY: phone of the hardcoded pandit dev account
@@ -35,14 +43,18 @@ type AuthHandlerV2 struct {
 // NewAuthHandlerV2 creates a new AuthHandlerV2.
 func NewAuthHandlerV2(
 	authService *authsvc.AuthServiceV2,
-	redis *redis.Client,
+	store OTPStore,
 	logger *slog.Logger,
 	panditPhone string,
 	yajmanPhone string,
 ) *AuthHandlerV2 {
+	// Preserve nil-safe development startup when the concrete Redis client is nil.
+	if client, ok := store.(*redis.Client); ok && client == nil {
+		store = nil
+	}
 	return &AuthHandlerV2{
 		authService: authService,
-		redis:       redis,
+		redis:       store,
 		validate:    validator.New(),
 		logger:      logger,
 		panditPhone: panditPhone,
@@ -261,41 +273,32 @@ func (h *AuthHandlerV2) VerifyOTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Prefer caller-provided verification_id, fallback to Redis for backward compatibility.
-	clientProvidedVerificationID := verificationID
-	if verificationID == "" {
-		var err error
-		verificationID, err = h.getVerificationID(r.Context(), phone)
-		if err != nil {
-			if h.isRecentlyVerified(r.Context(), phone) {
-				apierrors.WriteProblemDetail(w, apierrors.BadRequest(
-					"This OTP has already been verified and used. Please request a new OTP to log in.",
-					r.URL.Path,
-				))
-				return
-			}
+	// The server-side phone -> challenge binding is mandatory. A caller-supplied
+	// ID is not proof that its OTP belongs to the phone being authenticated.
+	storedID, err := h.getVerificationID(r.Context(), phone)
+	if err != nil || storedID == "" {
+		if h.isRecentlyVerified(r.Context(), phone) {
 			apierrors.WriteProblemDetail(w, apierrors.BadRequest(
-				"OTP has not been sent to this number. Please request a new OTP.",
+				"This OTP has already been verified and used. Please request a new OTP to log in.",
 				r.URL.Path,
 			))
 			return
 		}
+		apierrors.WriteProblemDetail(w, apierrors.BadRequest(
+			"OTP has not been sent to this number. Please request a new OTP.",
+			r.URL.Path,
+		))
+		return
+	}
+	if verificationID != "" && verificationID != storedID {
+		apierrors.WriteProblemDetail(w, apierrors.BadRequest(
+			"The verification request does not match the latest OTP. Please request a new OTP.",
+			r.URL.Path,
+		))
+		return
 	}
 
-	authResp, err := h.authService.VerifyOTPWithID(r.Context(), phone, verificationID, otp)
-	// Safety fallback: if client-provided verification_id is stale, retry once with latest Redis id.
-	if err != nil && clientProvidedVerificationID != "" {
-		latestID, latestErr := h.getVerificationID(r.Context(), phone)
-		if latestErr == nil && latestID != "" && latestID != clientProvidedVerificationID {
-			h.logger.Warn(
-				"verify otp retrying with latest redis verification id",
-				"phone", phone,
-				"provided_verification_id", clientProvidedVerificationID,
-				"latest_verification_id", latestID,
-			)
-			authResp, err = h.authService.VerifyOTPWithID(r.Context(), phone, latestID, otp)
-		}
-	}
+	authResp, err := h.authService.VerifyOTPWithID(r.Context(), phone, storedID, otp)
 	if err != nil {
 		h.mapVerifyOTPError(w, r, err)
 		return
@@ -310,9 +313,6 @@ func (h *AuthHandlerV2) VerifyOTP(w http.ResponseWriter, r *http.Request) {
 
 // getVerificationID looks up the verificationId stored by SendOTP in Redis.
 func (h *AuthHandlerV2) getVerificationID(ctx context.Context, phone string) (string, error) {
-	if phone == "+919999999999" || phone == "+918888888888" {
-		return "reviewer-test-verification-id", nil
-	}
 	if h.redis == nil {
 		return "", fmt.Errorf("redis unavailable")
 	}
@@ -512,7 +512,7 @@ type DevUserDTO struct {
 // Returns false (after writing a 403) if the request must not proceed.
 func devEnvGuard(w http.ResponseWriter, r *http.Request) bool {
 	env := os.Getenv("ENVIRONMENT")
-	if env == "development" || env == "dev" {
+	if (env == "development" || env == "dev") && os.Getenv("ENABLE_DEV_LOGIN") == "true" {
 		return true
 	}
 	apierrors.WriteProblemDetail(w, apierrors.NewProblemDetail(

@@ -57,6 +57,7 @@ func createAuthServiceV2(t *testing.T, userRepo userdomain.UserRepository, token
 		slog.Default(),
 	)
 	svc.SetTestKeys(privKey, pubKey)
+	t.Cleanup(svc.Stop)
 	return svc
 }
 

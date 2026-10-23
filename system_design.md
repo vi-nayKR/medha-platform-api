@@ -9,9 +9,7 @@ design decisions and their trade-offs, representative data flows, and the qualit
 
 ## 1. Goals & non-goals
 
-**Current state (2026-07-22):** the design below is implemented end to end across the production
-and development environments. Android, iOS, admin, and web consumers share the deployed V2 API;
-remaining iOS work is incremental product polish rather than a missing system integration.
+**Public reference scope (2026-10-22):** this document describes design intent and retained implementation, not a live production audit. Client integration, deployed image revisions and running topology have not been verified from this checkout. Publication-specific changes are recorded in [PUBLICATION_REVIEW.md](docs/PUBLICATION_REVIEW.md).
 
 **Goals**
 - One backend that serves the mobile clients and the admin panel with a single coherent REST + WS
