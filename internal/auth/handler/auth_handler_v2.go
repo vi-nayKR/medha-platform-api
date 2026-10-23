@@ -512,7 +512,7 @@ type DevUserDTO struct {
 // Returns false (after writing a 403) if the request must not proceed.
 func devEnvGuard(w http.ResponseWriter, r *http.Request) bool {
 	env := os.Getenv("ENVIRONMENT")
-	if env == "development" || env == "dev" {
+	if (env == "development" || env == "dev") && os.Getenv("ENABLE_DEV_LOGIN") == "true" {
 		return true
 	}
 	apierrors.WriteProblemDetail(w, apierrors.NewProblemDetail(

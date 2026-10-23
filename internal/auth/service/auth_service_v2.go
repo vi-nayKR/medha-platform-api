@@ -472,8 +472,11 @@ func hashTokenV2(token string) string {
 
 // DevLoginByRole is a DEV-ONLY shortcut that bypasses OTP.
 // It looks up the user by phone number, generates a real token pair, and returns.
-// The phone can be any phone number registered in the database.
+// The phone must be an explicitly configured fixture with developer login enabled.
 func (s *AuthServiceV2) DevLoginByRole(ctx context.Context, phone string) (authdomain.AuthResponse, error) {
+	if !developmentPhoneAllowed(phone) {
+		return authdomain.AuthResponse{}, authdomain.ErrAccountCannotAuthenticate
+	}
 	if !phoneE164Regex.MatchString(phone) {
 		return authdomain.AuthResponse{}, fmt.Errorf("invalid phone number format")
 	}
@@ -503,6 +506,9 @@ type DevUserInfo struct {
 // Results are sorted by role ASC then first_name ASC.
 // This is a DEV-ONLY helper — the endpoint is 403'd in production.
 func (s *AuthServiceV2) ListDevUsers(ctx context.Context, allowedPhones ...string) ([]DevUserInfo, error) {
+	if !developmentLoginEnabled() {
+		return nil, authdomain.ErrAccountCannotAuthenticate
+	}
 	users, err := s.userRepo.ListAll(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("list dev users: %w", err)
@@ -510,7 +516,7 @@ func (s *AuthServiceV2) ListDevUsers(ctx context.Context, allowedPhones ...strin
 
 	allowed := make(map[string]bool, len(allowedPhones))
 	for _, phone := range allowedPhones {
-		if phone != "" {
+		if developmentPhoneAllowed(phone) {
 			allowed[phone] = true
 		}
 	}

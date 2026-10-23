@@ -8,7 +8,7 @@ This repository is a collaborative-product reference derivative. Existing contri
 
 ## Changes in this review
 
-- Removed the phone-specific fixed-code reviewer authentication path from both the OTP service and handler. Every normal OTP verification now delegates to MessageCentral. Regression tests exercise the formerly special identities against provider rejection and reject missing verification IDs. The separately guarded development-login path is unchanged; it must never be enabled as a production substitute.
+- Removed the phone-specific fixed-code reviewer authentication path from both the OTP service and handler. Every normal OTP verification now delegates to MessageCentral. Regression tests exercise the formerly special identities against provider rejection and reject missing verification IDs. The development-login path is separately restricted as described in the 2026-10-23 follow-up below; it must never be enabled as a production substitute.
 - Bound HTTP OTP verification to the server's phone-to-challenge cache entry. A client-provided ID must match that entry; missing/empty bindings and mismatched IDs fail before the provider is called. Tests cover a different phone's challenge, substituted IDs, normal bound success, challenge consumption and a typed-nil Redis client. Verification now fails closed when that server binding is unavailable; the previous client-ID-only/cache-outage fallback is intentionally removed. The OTP cache is exposed as a small interface for hand-written test fakes without adding dependencies.
 - Tightened provider verification to accept only explicit completed/success outcomes on HTTP 200. Empty/unknown outcomes and already-verified responses no longer authorize a fresh login; non-200 HTTP responses fail closed. Local HTTP-stub regression tests cover these cases without contacting MessageCentral.
 - Converted account-specific seed/reset migrations **00021, 00035, 00048 and 00049** into version-preserving Up/Down no-ops. Fresh databases no longer receive developer identities, personal-contact/location fixtures or reviewer accounts through schema migration. No schema objects were removed. No rollback now deletes those accounts.
@@ -71,3 +71,14 @@ CI publication checks operate on the checked-out tree, not historical erasure. H
 | `go test -race -v ./internal/interest/service -run TestConfirmBookingPostgresConcurrencyAndRollback` | Exit 0 with the database test explicitly **SKIPPED** because `MEDHA_TEST_DATABASE_URL` was unset |
 
 Checksum-verified temporary Go 1.25.0 and Gitleaks 8.30.1 tools were used; the full golangci-lint suite and database migration/integration execution were not run. Historical findings remain as described above. These results do not verify production remediation.
+
+## Technical follow-up — 2026-10-23
+
+- JWT validation now fails closed for unavailable, missing, deleted or authentication-disabled accounts. Validated claims use the current database role rather than stale JWT privileges, without breaking onboarding role changes.
+- Developer login and listing require an explicit development environment, `ENABLE_DEV_LOGIN=true`, and configured fixture phones at the service boundary as well as HTTP. `.env.example` documents the default-off policy.
+- OTP send requires available Redis and successful persistence of a nonempty challenge. Nil/unavailable storage and failed binding writes cannot return usable-challenge success. Local provider/Redis-hook tests cover absent storage and write failure without SMS or external credentials.
+- Full `go test -race ./...`, `go vet ./...`, and `go build -o /tmp/medha-security-public-api ./cmd/medha-api` passed. The new provider tests also passed uncached with `go test -race -count=1 ./internal/platform/messagecentral/...`. `python3 scripts/check-publication.py` and `git diff --check` passed, all exit 0.
+
+Technical source review is complete; this is **not** publication-rights approval, authorization to merge into a live source, or deployed-remediation certification. Private product follow-up is tracked separately, without copying its operational details into this public repository. Existing access, historical copies and deployment provenance cannot be resolved by merging this branch. No history rewrite or main-branch merge was performed.
+
+Remaining limitations: send/verify/resend binding operations are not atomic, and established WebSockets are not continuously revalidated. Do not claim complete replay prevention or immediate revocation of every connection.

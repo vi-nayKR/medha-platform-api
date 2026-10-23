@@ -120,13 +120,19 @@ func (s *AuthService) ValidateJWT(tokenString string) (*authdomain.JWTClaims, er
 		return nil, authdomain.ErrInvalidToken
 	}
 
-	// Verify user exists and is not deleted
-	if s.userRepo != nil {
-		user, err := s.userRepo.GetByID(context.Background(), claims.UserID)
-		if err != nil || user == nil {
-			return nil, authdomain.ErrInvalidToken
-		}
+	// Authorization must reflect current account state, not just signed claims.
+	if s.userRepo == nil {
+		return nil, authdomain.ErrInvalidToken
 	}
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	user, err := s.userRepo.GetByID(ctx, claims.UserID)
+	if err != nil || user == nil || user.IsDeleted() || !user.CanAuthenticate {
+		return nil, authdomain.ErrInvalidToken
+	}
+	// Use current permissions, including role changes during onboarding. Keeping
+	// authentication valid does not retain privileges from an older signed role.
+	claims.Role = user.Role.String()
 
 	return claims, nil
 }
